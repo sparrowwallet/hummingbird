@@ -23,8 +23,8 @@ import java.util.concurrent.atomic.AtomicLong;
  * Individual instances are not thread-safe. Each thread must have its own
  * instance which is not shared.
  *
- * @author David Blackman and Sebastiano Vigna &lt;vigna@acm.org> (original C code)
- * @author Una Thompson &lt;una@unascribed.com> (Java port)
+ * @author David Blackman and Sebastiano Vigna (original C code)
+ * @author Una Thompson (Java port)
  * @see <a href="http://xoshiro.di.unimi.it/">http://xoshiro.di.unimi.it/</a>
  */
 public class RandomXoshiro256StarStar extends Random {

@@ -2,7 +2,7 @@
 .gradle
 *iml
 build
-/*.properties
+*.properties
 out
 *.log
 build-*.sh
