@@ -6,7 +6,7 @@ Hummingbird is a Java implementation of the [Uniform Resources (UR)](https://git
 It is a direct port of the [URKit](https://github.com/BlockchainCommons/URKit) implementation by Wolf McNally. 
 It contains both the classes to represent a UR, and a UR encoder and decoder to encode and decode to/from the QR representations.
 
-## Configuration
+## Setup
 
 Hummingbird is hosted in Maven Central and can be added as a dependency with the following:
 
@@ -59,3 +59,7 @@ Hummingbird has a thorough testsuite ported from URKit. The tests can be run wit
 ## License
 
 Hummingbird is licensed under the Apache 2 software license.
+
+## Dependencies
+
+- [cbor-java](https://github.com/c-rack/cbor-java/tree/master/src/main/java/co/nstant/in/cbor)
