@@ -39,8 +39,9 @@ Encoding a UR:
 ```java
 final int MIN_FRAGMENT_LENGTH = 10;
 final int MAX_FRAGMENT_LENGTH = 100;
+String type = UR.BYTES_TYPE;
 
-UR ur = UR.fromBytes(data);
+UR ur = UR.fromBytes(type, data);
 UREncoder encoder = new UREncoder(ur, MAX_FRAGMENT_LENGTH, MIN_FRAGMENT_LENGTH, 0);
 while(true) {
     String fragment = encoder.nextPart();

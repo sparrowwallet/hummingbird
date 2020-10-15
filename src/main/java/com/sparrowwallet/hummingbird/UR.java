@@ -41,14 +41,18 @@ public class UR {
         return data;
     }
 
-    public byte[] toBytes() throws InvalidTypeException, CborException {
-        if(!BYTES_TYPE.equals(getType())) {
-            throw new InvalidTypeException("Not a " + BYTES_TYPE + " type");
-        }
+    public byte[] toBytes() throws InvalidCBORException {
+        try {
+            ByteArrayInputStream bais = new ByteArrayInputStream(getCbor());
+            List<DataItem> dataItems = new CborDecoder(bais).decode();
+            if(!(dataItems.get(0) instanceof ByteString)) {
+                throw new IllegalArgumentException("First element of CBOR is not a byte string");
+            }
 
-        ByteArrayInputStream bais = new ByteArrayInputStream(getCbor());
-        List<DataItem> dataItems = new CborDecoder(bais).decode();
-        return ((ByteString)dataItems.get(0)).getBytes();
+            return ((ByteString)dataItems.get(0)).getBytes();
+        } catch(CborException e) {
+            throw new InvalidCBORException(e.getMessage());
+        }
     }
 
     public static boolean isURType(String type) {
@@ -67,7 +71,11 @@ public class UR {
         return false;
     }
 
-    public static UR fromBytes(byte[] data) {
+    public static UR fromBytes(byte[] data) throws InvalidTypeException, InvalidCBORException {
+        return fromBytes(BYTES_TYPE, data);
+    }
+
+    public static UR fromBytes(String type, byte[] data) throws InvalidTypeException, InvalidCBORException {
         try {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             new CborEncoder(baos).encode(new CborBuilder()
@@ -75,9 +83,9 @@ public class UR {
                     .build());
             byte[] cbor = baos.toByteArray();
 
-            return new UR("bytes", cbor);
-        } catch(InvalidTypeException | CborException e) {
-            return null;
+            return new UR(type, cbor);
+        } catch(CborException e) {
+            throw new InvalidCBORException(e.getMessage());
         }
     }
 
@@ -131,6 +139,12 @@ public class UR {
 
     public static class InvalidSequenceComponentException extends URException {
         public InvalidSequenceComponentException(String message) {
+            super(message);
+        }
+    }
+
+    public static class InvalidCBORException extends URException {
+        public InvalidCBORException(String message) {
             super(message);
         }
     }
