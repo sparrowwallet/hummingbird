@@ -11,7 +11,7 @@ It contains both the classes to represent a UR, and a UR encoder and decoder to 
 Hummingbird is hosted in Maven Central and can be added as a dependency with the following:
 
 ```
-implementation('com.sparrowwallet:hummingbird:1.2')
+implementation('com.sparrowwallet:hummingbird:1.3')
 ```
 
 ## Usage
