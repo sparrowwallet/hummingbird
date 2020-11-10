@@ -6,8 +6,8 @@ import co.nstant.in.cbor.CborEncoder;
 import co.nstant.in.cbor.CborException;
 import co.nstant.in.cbor.model.ByteString;
 import co.nstant.in.cbor.model.DataItem;
+import com.sparrowwallet.hummingbird.registry.*;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.util.Arrays;
 import java.util.List;
@@ -18,11 +18,13 @@ import java.util.Objects;
  */
 public class UR {
     public static final String UR_PREFIX = "ur";
-    public static final String BYTES_TYPE = "bytes";
-    public static final String CRYPTO_PSBT_TYPE = "crypto-psbt";
 
     private final String type;
     private final byte[] data;
+
+    public UR(RegistryType registryType, byte[] data) throws InvalidTypeException {
+        this(registryType.toString(), data);
+    }
 
     public UR(String type, byte[] data) throws InvalidTypeException {
         if(!isURType(type)) {
@@ -37,14 +39,52 @@ public class UR {
         return type;
     }
 
-    public byte[] getCbor() {
+    public RegistryType getRegistryType() {
+        return RegistryType.fromString(type);
+    }
+
+    public byte[] getCborBytes() {
         return data;
+    }
+
+    public Object decodeFromRegistry() throws InvalidCBORException {
+        RegistryType registryType = getRegistryType();
+
+        try {
+            List<DataItem> dataItems = CborDecoder.decode(getCborBytes());
+            DataItem item = dataItems.get(0);
+
+            if(registryType == RegistryType.BYTES) {
+                return ((ByteString)item).getBytes();
+            } else if(registryType == RegistryType.CRYPTO_SEED) {
+                return CryptoSeed.fromCbor(item);
+            } else if(registryType == RegistryType.CRYPTO_BIP39) {
+                return CryptoBip39.fromCbor(item);
+            } else if(registryType == RegistryType.CRYPTO_HDKEY) {
+                return CryptoHDKey.fromCbor(item);
+            } else if(registryType == RegistryType.CRYPTO_KEYPATH) {
+                return CryptoKeypath.fromCbor(item);
+            } else if(registryType == RegistryType.CRYPTO_COIN_INFO) {
+                return CryptoCoinInfo.fromCbor(item);
+            } else if(registryType == RegistryType.CRYPTO_ECKEY) {
+                return CryptoECKey.fromCbor(item);
+            } else if(registryType == RegistryType.CRYPTO_ADDRESS) {
+                return CryptoAddress.fromCbor(item);
+            } else if(registryType == RegistryType.CRYPTO_OUTPUT) {
+                return CryptoOutput.fromCbor(item);
+            } else if(registryType == RegistryType.CRYPTO_PSBT) {
+                return CryptoPSBT.fromCbor(item);
+            }
+        } catch(CborException e) {
+            throw new InvalidCBORException(e.getMessage());
+        }
+
+        return null;
     }
 
     public byte[] toBytes() throws InvalidCBORException {
         try {
-            ByteArrayInputStream bais = new ByteArrayInputStream(getCbor());
-            List<DataItem> dataItems = new CborDecoder(bais).decode();
+            List<DataItem> dataItems = CborDecoder.decode(getCborBytes());
             if(!(dataItems.get(0) instanceof ByteString)) {
                 throw new IllegalArgumentException("First element of CBOR is not a byte string");
             }
@@ -72,7 +112,7 @@ public class UR {
     }
 
     public static UR fromBytes(byte[] data) throws InvalidTypeException, InvalidCBORException {
-        return fromBytes(BYTES_TYPE, data);
+        return fromBytes(RegistryType.BYTES.toString(), data);
     }
 
     public static UR fromBytes(String type, byte[] data) throws InvalidTypeException, InvalidCBORException {

@@ -15,7 +15,7 @@ public class UREncoder {
 
     public UREncoder(UR ur, int maxFragmentLen, int minFragmentLen, long firstSeqNum) {
         this.ur = ur;
-        this.fountainEncoder = new FountainEncoder(ur.getCbor(), maxFragmentLen, minFragmentLen, firstSeqNum);
+        this.fountainEncoder = new FountainEncoder(ur.getCborBytes(), maxFragmentLen, minFragmentLen, firstSeqNum);
     }
 
     public boolean isComplete() {
@@ -48,7 +48,7 @@ public class UREncoder {
     }
 
     public static String encode(UR ur) {
-        String encoded = Bytewords.encode(ur.getCbor(), Bytewords.Style.MINIMAL);
+        String encoded = Bytewords.encode(ur.getCborBytes(), Bytewords.Style.MINIMAL);
         return encodeUR(ur.getType(), encoded);
     }
 
