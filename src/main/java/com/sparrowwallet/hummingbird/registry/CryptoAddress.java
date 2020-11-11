@@ -31,7 +31,7 @@ public class CryptoAddress {
 
     public static CryptoAddress fromCbor(DataItem item) {
         CryptoCoinInfo info = null;
-        Type type = null;
+        Type type = Type.P2PKH;
         byte[] data = null;
 
         Map map = (Map)item;

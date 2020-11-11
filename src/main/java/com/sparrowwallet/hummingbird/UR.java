@@ -74,6 +74,8 @@ public class UR {
                 return CryptoOutput.fromCbor(item);
             } else if(registryType == RegistryType.CRYPTO_PSBT) {
                 return CryptoPSBT.fromCbor(item);
+            } else if(registryType == RegistryType.CRYPTO_ACCOUNT) {
+                return CryptoAccount.fromCbor(item);
             }
         } catch(CborException e) {
             throw new InvalidCBORException(e.getMessage());

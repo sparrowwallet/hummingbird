@@ -11,7 +11,7 @@ It contains both the classes to represent a UR, and a UR encoder and decoder to 
 Hummingbird is hosted in Maven Central and can be added as a dependency with the following:
 
 ```
-implementation('com.sparrowwallet:hummingbird:1.3')
+implementation('com.sparrowwallet:hummingbird:1.4')
 ```
 
 ## Usage
@@ -48,6 +48,25 @@ while(true) {
     //Show UR fragment as QR code...
 }
 ```
+
+Hummingbird also includes a type registry to assist with decoding from CBOR to POJOs:
+
+```java
+RegistryType urRegistryType = ur.getRegistryType();
+if(urRegistryType.equals(RegistryType.CRYPTO_PSBT)) {
+    CryptoPSBT cryptoPSBT = (CryptoPSBT)ur.decodeFromRegistry();
+} else if(urRegistryType.equals(RegistryType.CRYPTO_ADDRESS)) {
+    CryptoAddress cryptoAddress = (CryptoAddress)ur.decodeFromRegistry();
+} else if(urRegistryType.equals(RegistryType.CRYPTO_HDKEY)) {
+    CryptoHDKey cryptoHDKey = (CryptoHDKey)ur.decodeFromRegistry();
+} else if(urRegistryType.equals(RegistryType.CRYPTO_OUTPUT)) {
+    CryptoOutput cryptoOutput = (CryptoOutput)ur.decodeFromRegistry();
+} else if(urRegistryType.equals(RegistryType.CRYPTO_ACCOUNT)) {
+    CryptoAccount cryptoAccount = (CryptoAccount)ur.decodeFromRegistry();
+}
+```
+
+See `RegistryType.java` for the full list of supported types and their POJO implementation classes where available. 
 
 ## Testing
 
