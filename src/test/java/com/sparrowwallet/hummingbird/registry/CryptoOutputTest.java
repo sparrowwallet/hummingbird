@@ -49,7 +49,7 @@ public class CryptoOutputTest {
 
     @Test
     public void testP2PKH() throws CborException {
-        String hex = "d90193d9012fa403582102d2b36900396c9282fa14628566582f206a5dd0bcc8d5e892611806cafb0301f0045820637807030d55d01f9a0cb3a7839515d796bd07706386a6eddf06cc29a65a0e2906d90130a20186182cf500f500f5021ad34db33f07d90130a1018401f480f4";
+        String hex = "d90193d9012fa503582102d2b36900396c9282fa14628566582f206a5dd0bcc8d5e892611806cafb0301f0045820637807030d55d01f9a0cb3a7839515d796bd07706386a6eddf06cc29a65a0e2906d90130a20186182cf500f500f5021ad34db33f07d90130a1018401f480f4081a78412e3a";
         byte[] data = TestUtils.hexToBytes(hex);
         List<DataItem> items = CborDecoder.decode(data);
         CryptoOutput cryptoOutput = CryptoOutput.fromCbor(items.get(0));
@@ -57,9 +57,10 @@ public class CryptoOutputTest {
         Assert.assertEquals("02d2b36900396c9282fa14628566582f206a5dd0bcc8d5e892611806cafb0301f0", TestUtils.bytesToHex(cryptoOutput.getHdKey().getKey()));
         Assert.assertEquals("637807030d55d01f9a0cb3a7839515d796bd07706386a6eddf06cc29a65a0e29", TestUtils.bytesToHex(cryptoOutput.getHdKey().getChainCode()));
         Assert.assertEquals("44'/0'/0'", cryptoOutput.getHdKey().getOrigin().getPath());
-        Assert.assertEquals("d34db33f", TestUtils.bytesToHex(cryptoOutput.getHdKey().getOrigin().getParentFingerprint()));
+        Assert.assertEquals("d34db33f", TestUtils.bytesToHex(cryptoOutput.getHdKey().getOrigin().getSourceFingerprint()));
+        Assert.assertEquals("78412e3a", TestUtils.bytesToHex(cryptoOutput.getHdKey().getParentFingerprint()));
         Assert.assertEquals("1/*", cryptoOutput.getHdKey().getChildren().getPath());
-        Assert.assertNull(cryptoOutput.getHdKey().getChildren().getParentFingerprint());
+        Assert.assertNull(cryptoOutput.getHdKey().getChildren().getSourceFingerprint());
     }
 
     @Test
@@ -76,18 +77,18 @@ public class CryptoOutputTest {
         Assert.assertEquals("03cbcaa9c98c877a26977d00825c956a238e8dddfbd322cce4f74b0b5bd6ace4a7", TestUtils.bytesToHex(firstKey.getKey()));
         Assert.assertEquals("60499f801b896d83179a4374aeb7822aaeaceaa0db1f85ee3e904c4defbd9689", TestUtils.bytesToHex(firstKey.getChainCode()));
         Assert.assertNull(firstKey.getOrigin().getPath());
-        Assert.assertNull(firstKey.getOrigin().getParentFingerprint());
+        Assert.assertNull(firstKey.getOrigin().getSourceFingerprint());
         Assert.assertEquals(Integer.valueOf(0), firstKey.getOrigin().getDepth());
         Assert.assertEquals("1/0/*", firstKey.getChildren().getPath());
-        Assert.assertNull(firstKey.getChildren().getParentFingerprint());
+        Assert.assertNull(firstKey.getChildren().getSourceFingerprint());
 
         CryptoHDKey secondKey = cryptoOutput.getMultiKey().getHdKeys().get(1);
         Assert.assertEquals("02fc9e5af0ac8d9b3cecfe2a888e2117ba3d089d8585886c9c826b6b22a98d12ea", TestUtils.bytesToHex(secondKey.getKey()));
         Assert.assertEquals("f0909affaa7ee7abe5dd4e100598d4dc53cd709d5a5c2cac40e7412f232f7c9c", TestUtils.bytesToHex(secondKey.getChainCode()));
         Assert.assertEquals("0", secondKey.getOrigin().getPath());
-        Assert.assertEquals("bd16bee5", TestUtils.bytesToHex(secondKey.getOrigin().getParentFingerprint()));
+        Assert.assertEquals("bd16bee5", TestUtils.bytesToHex(secondKey.getOrigin().getSourceFingerprint()));
         Assert.assertNull(secondKey.getOrigin().getDepth());
         Assert.assertEquals("0/0/*", secondKey.getChildren().getPath());
-        Assert.assertNull(secondKey.getChildren().getParentFingerprint());
+        Assert.assertNull(secondKey.getChildren().getSourceFingerprint());
     }
 }

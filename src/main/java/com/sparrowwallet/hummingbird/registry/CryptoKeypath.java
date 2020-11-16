@@ -9,20 +9,20 @@ import java.util.StringJoiner;
 
 public class CryptoKeypath {
     public static final int COMPONENTS_KEY = 1;
-    public static final int PARENT_FINGERPRINT_KEY = 2;
+    public static final int SOURCE_FINGERPRINT_KEY = 2;
     public static final int DEPTH_KEY = 3;
 
     private final List<PathComponent> components;
-    private final byte[] parentFingerprint;
+    private final byte[] sourceFingerprint;
     private final Integer depth;
 
-    public CryptoKeypath(List<PathComponent> components, byte[] parentFingerprint) {
-        this(components, parentFingerprint, 0);
+    public CryptoKeypath(List<PathComponent> components, byte[] sourceFingerprint) {
+        this(components, sourceFingerprint, 0);
     }
 
-    public CryptoKeypath(List<PathComponent> components, byte[] parentFingerprint, Integer depth) {
+    public CryptoKeypath(List<PathComponent> components, byte[] sourceFingerprint, Integer depth) {
         this.components = components;
-        this.parentFingerprint = parentFingerprint == null ? null : Arrays.copyOfRange(parentFingerprint, parentFingerprint.length - 4, parentFingerprint.length);
+        this.sourceFingerprint = sourceFingerprint == null ? null : Arrays.copyOfRange(sourceFingerprint, sourceFingerprint.length - 4, sourceFingerprint.length);
         this.depth = depth;
     }
 
@@ -42,8 +42,8 @@ public class CryptoKeypath {
         return joiner.toString();
     }
 
-    public byte[] getParentFingerprint() {
-        return parentFingerprint;
+    public byte[] getSourceFingerprint() {
+        return sourceFingerprint;
     }
 
     public Integer getDepth() {
@@ -52,7 +52,7 @@ public class CryptoKeypath {
 
     public static CryptoKeypath fromCbor(DataItem item) {
         List<PathComponent> components = new ArrayList<>();
-        byte[] parentFingerprint = null;
+        byte[] sourceFingerprint = null;
         Integer depth = null;
 
         Map map = (Map)item;
@@ -71,13 +71,13 @@ public class CryptoKeypath {
                         components.add(new PathComponent(hardened));
                     }
                 }
-            } else if(intKey == PARENT_FINGERPRINT_KEY) {
-                parentFingerprint = ((UnsignedInteger)map.get(key)).getValue().toByteArray();
+            } else if(intKey == SOURCE_FINGERPRINT_KEY) {
+                sourceFingerprint = ((UnsignedInteger)map.get(key)).getValue().toByteArray();
             } else if(intKey == DEPTH_KEY) {
                 depth = ((UnsignedInteger)map.get(key)).getValue().intValue();
             }
         }
 
-        return new CryptoKeypath(components, parentFingerprint, depth);
+        return new CryptoKeypath(components, sourceFingerprint, depth);
     }
 }

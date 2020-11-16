@@ -2,6 +2,8 @@ package com.sparrowwallet.hummingbird.registry;
 
 import co.nstant.in.cbor.model.*;
 
+import java.util.Arrays;
+
 public class CryptoHDKey {
     public static final int IS_MASTER_KEY = 1;
     public static final int IS_PRIVATE_KEY = 2;
@@ -10,6 +12,7 @@ public class CryptoHDKey {
     public static final int USE_INFO_KEY = 5;
     public static final int ORIGIN_KEY = 6;
     public static final int CHILDREN_KEY = 7;
+    public static final int PARENT_FINGERPRINT_KEY = 8;
 
     private final boolean master;
     private final boolean privateKey;
@@ -18,6 +21,7 @@ public class CryptoHDKey {
     private final CryptoCoinInfo useInfo;
     private final CryptoKeypath origin;
     private final CryptoKeypath children;
+    private final byte[] parentFingerprint;
 
     public CryptoHDKey(byte[] key, byte[] chainCode) {
         this.master = true;
@@ -27,9 +31,10 @@ public class CryptoHDKey {
         this.useInfo = null;
         this.origin = null;
         this.children = null;
+        this.parentFingerprint = null;
     }
 
-    public CryptoHDKey(boolean privateKey, byte[] key, byte[] chainCode, CryptoCoinInfo useInfo, CryptoKeypath origin, CryptoKeypath children) {
+    public CryptoHDKey(boolean privateKey, byte[] key, byte[] chainCode, CryptoCoinInfo useInfo, CryptoKeypath origin, CryptoKeypath children, byte[] parentFingerprint) {
         this.master = false;
         this.privateKey = privateKey;
         this.key = key;
@@ -37,6 +42,7 @@ public class CryptoHDKey {
         this.useInfo = useInfo;
         this.origin = origin;
         this.children = children;
+        this.parentFingerprint = parentFingerprint == null ? null : Arrays.copyOfRange(parentFingerprint, parentFingerprint.length - 4, parentFingerprint.length);
     }
 
     public boolean isMaster() {
@@ -67,6 +73,10 @@ public class CryptoHDKey {
         return children;
     }
 
+    public byte[] getParentFingerprint() {
+        return parentFingerprint;
+    }
+
     public static CryptoHDKey fromCbor(DataItem item) {
         boolean isMasterKey = false;
         boolean isPrivateKey = false;
@@ -75,6 +85,7 @@ public class CryptoHDKey {
         CryptoCoinInfo useInfo = null;
         CryptoKeypath origin = null;
         CryptoKeypath children = null;
+        byte[] parentFingerprint = null;
 
         Map map = (Map)item;
         for(DataItem key : map.getKeys()) {
@@ -94,6 +105,8 @@ public class CryptoHDKey {
                 origin = CryptoKeypath.fromCbor(map.get(uintKey));
             } else if(intKey == CHILDREN_KEY) {
                 children = CryptoKeypath.fromCbor(map.get(uintKey));
+            } else if(intKey == PARENT_FINGERPRINT_KEY) {
+                parentFingerprint = ((UnsignedInteger)map.get(uintKey)).getValue().toByteArray();
             }
         }
 
@@ -104,7 +117,7 @@ public class CryptoHDKey {
         if(isMasterKey) {
             return new CryptoHDKey(keyData, chainCode);
         } else {
-            return new CryptoHDKey(isPrivateKey, keyData, chainCode, useInfo, origin, children);
+            return new CryptoHDKey(isPrivateKey, keyData, chainCode, useInfo, origin, children, parentFingerprint);
         }
     }
 }
