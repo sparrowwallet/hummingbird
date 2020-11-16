@@ -27,6 +27,7 @@ public class BC32 {
     private static final String CHARSET = "qpzry9x8gf2tvdw0s3jn54khce6mua7l";
 
     /**
+     *
      * Find the polynomial with value coefficients mod the generator as 30-bit.
      */
     private static int polymod(final byte[] values) {
@@ -69,6 +70,9 @@ public class BC32 {
 
     /**
      * Encode a BC32 string.
+     *
+     * @param values the bytes to encode
+     * @return the encoded BC32 string
      */
     public static String encode(final byte[] values) {
         List<Byte> boxedList = new ArrayList<>(values.length);
@@ -92,6 +96,9 @@ public class BC32 {
 
     /**
      * Decode a BC32 string.
+     *
+     * @param str the String to decode
+     * @return the decoded bytes
      */
     public static byte[] decode(final String str) {
         boolean lower = false, upper = false;
