@@ -11,7 +11,7 @@ It contains both the classes to represent a UR, and a UR encoder and decoder to 
 Hummingbird is hosted in Maven Central and can be added as a dependency with the following:
 
 ```
-implementation('com.sparrowwallet:hummingbird:1.4')
+implementation('com.sparrowwallet:hummingbird:1.5')
 ```
 
 ## Usage
@@ -67,6 +67,26 @@ if(urRegistryType.equals(RegistryType.CRYPTO_PSBT)) {
 ```
 
 See `RegistryType.java` for the full list of supported types and their POJO implementation classes where available. 
+
+## Legacy (UR1.0) Encoding and Decoding
+
+Encoding and decoding with the [UR1.0](https://github.com/CoboVault/Research/blob/master/papers/bcr-0005-ur.md) specification is supported.
+Note however that these classes are deprecated and will be removed in a future release.
+
+```java
+//decoding
+LegacyURDecoder decoder = new LegacyURDecoder();
+while(!decoder.isComplete()) {
+    //Loop adding QR fragments to the decoder until it has a result
+    String qrText = getFromNextQR();
+    decoder.receivePart(qrText);
+}
+UR ur = decoder.decode();
+
+//encoding
+LegacyUREncoder encoder = new LegacyUREncoder(ur);
+String[] fragments = legacyUREncoder.encode();
+```
 
 ## Testing
 

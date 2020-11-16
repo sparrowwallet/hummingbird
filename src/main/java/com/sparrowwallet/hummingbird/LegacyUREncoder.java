@@ -5,6 +5,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.stream.IntStream;
 
+@Deprecated
 public class LegacyUREncoder {
     public static final int DEFAULT_FRAGMENT_LENGTH = 200;
 

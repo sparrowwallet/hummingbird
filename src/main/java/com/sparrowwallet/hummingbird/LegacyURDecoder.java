@@ -3,6 +3,7 @@ package com.sparrowwallet.hummingbird;
 import java.security.MessageDigest;
 import java.util.*;
 
+@Deprecated
 public class LegacyURDecoder {
     private final Set<String> fragments = new LinkedHashSet<>();
 
