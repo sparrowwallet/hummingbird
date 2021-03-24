@@ -8,7 +8,7 @@ public class LegacyURDecoder {
     private final Set<String> fragments = new LinkedHashSet<>();
 
     public void receivePart(String fragment) {
-        fragments.add(fragment);
+        fragments.add(fragment.toLowerCase());
     }
 
     public boolean isComplete() {
@@ -54,7 +54,7 @@ public class LegacyURDecoder {
         }
 
         //Last component is always fragment payload in both legacy and current
-        String payload = components[components.length-1];
+        String payload = components[components.length-1].toLowerCase();
 
         //BC32 will never contain the following characters
         if(payload.indexOf('b') > -1 || payload.indexOf('i') > -1 || payload.indexOf('o') > -1) {

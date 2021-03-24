@@ -16,7 +16,7 @@ apply plugin: 'com.bmuschko.nexus'
 
 archivesBaseName = 'hummingbird'
 group 'com.sparrowwallet'
-version '1.5.3'
+version '1.5.4'
 
 repositories {
     mavenCentral()
