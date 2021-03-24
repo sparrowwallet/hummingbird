@@ -27,6 +27,24 @@ public class LegacyURDecoder {
         return true;
     }
 
+    public double getPercentComplete() {
+        if(fragments.isEmpty()) {
+            return 0d;
+        }
+
+        String fragment = fragments.iterator().next();
+        String[] components = fragment.split("/");
+        if(components.length > 3) {
+            int[] sequence = checkAndGetSequence(components[1]);
+            int total = sequence[1];
+            if(total > 0 && fragments.size() <= total) {
+                return (double)fragments.size() / total;
+            }
+        }
+
+        return 1d;
+    }
+
     public static boolean isLegacyURFragment(String fragment) {
         String[] components = fragment.split("/");
 
