@@ -9,6 +9,8 @@ import com.sparrowwallet.hummingbird.UREncoder;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class CryptoAccountTest {
@@ -21,7 +23,7 @@ public class CryptoAccountTest {
         Assert.assertEquals("37b5eed4", TestUtils.bytesToHex(cryptoAccount.getMasterFingerprint()));
 
         CryptoOutput cryptoOutput1 = cryptoAccount.getOutputDescriptors().get(0);
-        Assert.assertEquals(List.of(ScriptExpression.PUBLIC_KEY_HASH), cryptoOutput1.getScriptExpressions());
+        Assert.assertEquals(Collections.singletonList(ScriptExpression.PUBLIC_KEY_HASH), cryptoOutput1.getScriptExpressions());
         Assert.assertEquals("03eb3e2863911826374de86c231a4b76f0b89dfa174afb78d7f478199884d9dd32", TestUtils.bytesToHex(cryptoOutput1.getHdKey().getKey()));
         Assert.assertEquals("6456a5df2db0f6d9af72b2a1af4b25f45200ed6fcc29c3440b311d4796b70b5b", TestUtils.bytesToHex(cryptoOutput1.getHdKey().getChainCode()));
         Assert.assertEquals("44'/0'/0'", cryptoOutput1.getHdKey().getOrigin().getPath());
@@ -29,7 +31,7 @@ public class CryptoAccountTest {
         Assert.assertNull(cryptoOutput1.getHdKey().getChildren());
 
         CryptoOutput cryptoOutput2 = cryptoAccount.getOutputDescriptors().get(1);
-        Assert.assertEquals(List.of(ScriptExpression.SCRIPT_HASH, ScriptExpression.WITNESS_PUBLIC_KEY_HASH), cryptoOutput2.getScriptExpressions());
+        Assert.assertEquals(Arrays.asList(ScriptExpression.SCRIPT_HASH, ScriptExpression.WITNESS_PUBLIC_KEY_HASH), cryptoOutput2.getScriptExpressions());
         Assert.assertEquals("02c7e4823730f6ee2cf864e2c352060a88e60b51a84e89e4c8c75ec22590ad6b69", TestUtils.bytesToHex(cryptoOutput2.getHdKey().getKey()));
         Assert.assertEquals("9d2f86043276f9251a4a4f577166a5abeb16b6ec61e226b5b8fa11038bfda42d", TestUtils.bytesToHex(cryptoOutput2.getHdKey().getChainCode()));
         Assert.assertEquals("49'/0'/0'", cryptoOutput2.getHdKey().getOrigin().getPath());
@@ -37,7 +39,7 @@ public class CryptoAccountTest {
         Assert.assertNull(cryptoOutput2.getHdKey().getChildren());
 
         CryptoOutput cryptoOutput3 = cryptoAccount.getOutputDescriptors().get(2);
-        Assert.assertEquals(List.of(ScriptExpression.WITNESS_PUBLIC_KEY_HASH), cryptoOutput3.getScriptExpressions());
+        Assert.assertEquals(Collections.singletonList(ScriptExpression.WITNESS_PUBLIC_KEY_HASH), cryptoOutput3.getScriptExpressions());
         Assert.assertEquals("03fd433450b6924b4f7efdd5d1ed017d364be95ab2b592dc8bddb3b00c1c24f63f", TestUtils.bytesToHex(cryptoOutput3.getHdKey().getKey()));
         Assert.assertEquals("72ede7334d5acf91c6fda622c205199c595a31f9218ed30792d301d5ee9e3a88", TestUtils.bytesToHex(cryptoOutput3.getHdKey().getChainCode()));
         Assert.assertEquals("84'/0'/0'", cryptoOutput3.getHdKey().getOrigin().getPath());
@@ -45,7 +47,7 @@ public class CryptoAccountTest {
         Assert.assertNull(cryptoOutput3.getHdKey().getChildren());
 
         CryptoOutput cryptoOutput4 = cryptoAccount.getOutputDescriptors().get(3);
-        Assert.assertEquals(List.of(ScriptExpression.SCRIPT_HASH), cryptoOutput4.getScriptExpressions());
+        Assert.assertEquals(Collections.singletonList(ScriptExpression.SCRIPT_HASH), cryptoOutput4.getScriptExpressions());
         Assert.assertEquals("035ccd58b63a2cdc23d0812710603592e7457573211880cb59b1ef012e168e059a", TestUtils.bytesToHex(cryptoOutput4.getHdKey().getKey()));
         Assert.assertEquals("88d3299b448f87215d96b0c226235afc027f9e7dc700284f3e912a34daeb1a23", TestUtils.bytesToHex(cryptoOutput4.getHdKey().getChainCode()));
         Assert.assertEquals("45'", cryptoOutput4.getHdKey().getOrigin().getPath());
@@ -53,7 +55,7 @@ public class CryptoAccountTest {
         Assert.assertNull(cryptoOutput4.getHdKey().getChildren());
 
         CryptoOutput cryptoOutput5 = cryptoAccount.getOutputDescriptors().get(4);
-        Assert.assertEquals(List.of(ScriptExpression.SCRIPT_HASH, ScriptExpression.WITNESS_SCRIPT_HASH), cryptoOutput5.getScriptExpressions());
+        Assert.assertEquals(Arrays.asList(ScriptExpression.SCRIPT_HASH, ScriptExpression.WITNESS_SCRIPT_HASH), cryptoOutput5.getScriptExpressions());
         Assert.assertEquals("032c78ebfcabdac6d735a0820ef8732f2821b4fb84cd5d6b26526938f90c050711", TestUtils.bytesToHex(cryptoOutput5.getHdKey().getKey()));
         Assert.assertEquals("7953efe16a73e5d3f9f2d4c6e49bd88e22093bbd85be5a7e862a4b98a16e0ab6", TestUtils.bytesToHex(cryptoOutput5.getHdKey().getChainCode()));
         Assert.assertEquals("48'/0'/0'/1'", cryptoOutput5.getHdKey().getOrigin().getPath());
@@ -61,7 +63,7 @@ public class CryptoAccountTest {
         Assert.assertNull(cryptoOutput5.getHdKey().getChildren());
 
         CryptoOutput cryptoOutput6 = cryptoAccount.getOutputDescriptors().get(5);
-        Assert.assertEquals(List.of(ScriptExpression.WITNESS_SCRIPT_HASH), cryptoOutput6.getScriptExpressions());
+        Assert.assertEquals(Collections.singletonList(ScriptExpression.WITNESS_SCRIPT_HASH), cryptoOutput6.getScriptExpressions());
         Assert.assertEquals("0260563ee80c26844621b06b74070baf0e23fb76ce439d0237e87502ebbd3ca346", TestUtils.bytesToHex(cryptoOutput6.getHdKey().getKey()));
         Assert.assertEquals("2fa0e41c9dc43dc4518659bfcef935ba8101b57dbc0812805dd983bc1d34b813", TestUtils.bytesToHex(cryptoOutput6.getHdKey().getChainCode()));
         Assert.assertEquals("48'/0'/0'/2'", cryptoOutput6.getHdKey().getOrigin().getPath());

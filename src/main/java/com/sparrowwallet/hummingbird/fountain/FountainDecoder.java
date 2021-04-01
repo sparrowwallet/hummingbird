@@ -266,7 +266,9 @@ public class FountainDecoder {
 
     static byte[] joinFragments(List<byte[]> fragments, int messageLen) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        fragments.forEach(baos::writeBytes);
+        for(byte[] fragment : fragments) {
+            baos.write(fragment, 0, fragment.length);
+        }
         byte[] message = baos.toByteArray();
 
         byte[] unpaddedMessage = new byte[messageLen];

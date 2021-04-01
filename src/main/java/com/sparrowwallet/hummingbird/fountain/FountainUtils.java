@@ -2,6 +2,7 @@ package com.sparrowwallet.hummingbird.fountain;
 
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -15,7 +16,7 @@ public class FountainUtils {
         // others. This means that if you only generate the first `seqLen` parts,
         // then you have all the parts you need to decode the message.
         if(seqNum <= seqLen) {
-            return List.of((int)seqNum - 1);
+            return Collections.singletonList((int)seqNum - 1);
         } else {
             ByteBuffer buffer = ByteBuffer.allocate(Integer.BYTES * 2);
             buffer.putInt((int)(seqNum));

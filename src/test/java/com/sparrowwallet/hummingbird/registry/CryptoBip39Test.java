@@ -7,6 +7,7 @@ import com.sparrowwallet.hummingbird.TestUtils;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class CryptoBip39Test {
@@ -16,7 +17,7 @@ public class CryptoBip39Test {
         byte[] data = TestUtils.hexToBytes(hex);
         List<DataItem> items = CborDecoder.decode(data);
         CryptoBip39 cryptoSeed = CryptoBip39.fromCbor(items.get(0));
-        Assert.assertEquals(List.of("shield", "group", "erode", "awake", "lock", "sausage", "cash", "glare", "wave", "crew", "flame", "glove"), cryptoSeed.getWords());
+        Assert.assertEquals(Arrays.asList("shield", "group", "erode", "awake", "lock", "sausage", "cash", "glare", "wave", "crew", "flame", "glove"), cryptoSeed.getWords());
         Assert.assertEquals("en", cryptoSeed.getLanguage());
     }
 }

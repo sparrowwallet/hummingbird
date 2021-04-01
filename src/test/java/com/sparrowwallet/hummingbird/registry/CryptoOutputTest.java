@@ -7,6 +7,8 @@ import com.sparrowwallet.hummingbird.TestUtils;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class CryptoOutputTest {
@@ -16,7 +18,7 @@ public class CryptoOutputTest {
         byte[] data = TestUtils.hexToBytes(hex);
         List<DataItem> items = CborDecoder.decode(data);
         CryptoOutput cryptoOutput = CryptoOutput.fromCbor(items.get(0));
-        Assert.assertEquals(List.of(ScriptExpression.PUBLIC_KEY_HASH), cryptoOutput.getScriptExpressions());
+        Assert.assertEquals(Collections.singletonList(ScriptExpression.PUBLIC_KEY_HASH), cryptoOutput.getScriptExpressions());
         Assert.assertEquals("02c6047f9441ed7d6d3045406e95c07cd85c778e4b8cef3ca7abac09b95c709ee5", TestUtils.bytesToHex(cryptoOutput.getEcKey().getData()));
     }
 
@@ -26,7 +28,7 @@ public class CryptoOutputTest {
         byte[] data = TestUtils.hexToBytes(hex);
         List<DataItem> items = CborDecoder.decode(data);
         CryptoOutput cryptoOutput = CryptoOutput.fromCbor(items.get(0));
-        Assert.assertEquals(List.of(ScriptExpression.SCRIPT_HASH, ScriptExpression.WITNESS_PUBLIC_KEY_HASH), cryptoOutput.getScriptExpressions());
+        Assert.assertEquals(Arrays.asList(ScriptExpression.SCRIPT_HASH, ScriptExpression.WITNESS_PUBLIC_KEY_HASH), cryptoOutput.getScriptExpressions());
         Assert.assertEquals("03fff97bd5755eeea420453a14355235d382f6472f8568a18b2f057a1460297556", TestUtils.bytesToHex(cryptoOutput.getEcKey().getData()));
     }
 
@@ -36,7 +38,7 @@ public class CryptoOutputTest {
         byte[] data = TestUtils.hexToBytes(hex);
         List<DataItem> items = CborDecoder.decode(data);
         CryptoOutput cryptoOutput = CryptoOutput.fromCbor(items.get(0));
-        Assert.assertEquals(List.of(ScriptExpression.SCRIPT_HASH, ScriptExpression.MULTISIG), cryptoOutput.getScriptExpressions());
+        Assert.assertEquals(Arrays.asList(ScriptExpression.SCRIPT_HASH, ScriptExpression.MULTISIG), cryptoOutput.getScriptExpressions());
         Assert.assertNull(cryptoOutput.getHdKey());
         Assert.assertEquals(2, cryptoOutput.getMultiKey().getThreshold());
 
@@ -53,7 +55,7 @@ public class CryptoOutputTest {
         byte[] data = TestUtils.hexToBytes(hex);
         List<DataItem> items = CborDecoder.decode(data);
         CryptoOutput cryptoOutput = CryptoOutput.fromCbor(items.get(0));
-        Assert.assertEquals(List.of(ScriptExpression.PUBLIC_KEY_HASH), cryptoOutput.getScriptExpressions());
+        Assert.assertEquals(Collections.singletonList(ScriptExpression.PUBLIC_KEY_HASH), cryptoOutput.getScriptExpressions());
         Assert.assertEquals("02d2b36900396c9282fa14628566582f206a5dd0bcc8d5e892611806cafb0301f0", TestUtils.bytesToHex(cryptoOutput.getHdKey().getKey()));
         Assert.assertEquals("637807030d55d01f9a0cb3a7839515d796bd07706386a6eddf06cc29a65a0e29", TestUtils.bytesToHex(cryptoOutput.getHdKey().getChainCode()));
         Assert.assertEquals("44'/0'/0'", cryptoOutput.getHdKey().getOrigin().getPath());
@@ -69,7 +71,7 @@ public class CryptoOutputTest {
         byte[] data = TestUtils.hexToBytes(hex);
         List<DataItem> items = CborDecoder.decode(data);
         CryptoOutput cryptoOutput = CryptoOutput.fromCbor(items.get(0));
-        Assert.assertEquals(List.of(ScriptExpression.WITNESS_SCRIPT_HASH, ScriptExpression.MULTISIG), cryptoOutput.getScriptExpressions());
+        Assert.assertEquals(Arrays.asList(ScriptExpression.WITNESS_SCRIPT_HASH, ScriptExpression.MULTISIG), cryptoOutput.getScriptExpressions());
         Assert.assertNull(cryptoOutput.getHdKey());
         Assert.assertEquals(1, cryptoOutput.getMultiKey().getThreshold());
 

@@ -83,23 +83,21 @@ public class LegacyURDecoder {
         String[] components = fragment.split("/");
 
         switch(components.length) {
-            case 2 -> {
+            case 2:
                 return new UR(components[0].substring(UR.UR_PREFIX.length() + 1), BC32.decode(components[1]));
-            }
-            case 3 -> {
+            case 3:
                 String digest = components[1];
                 String data = components[2];
                 checkDigest(data, digest);
                 return new UR(components[0].substring(UR.UR_PREFIX.length() + 1), BC32.decode(data));
-            }
-            case 4 -> {
+            case 4:
                 checkAndGetSequence(components[1]);
-                String digest = components[2];
-                String data = components[3];
-                checkDigest(digest, fragment);
-                return new UR(components[0].substring(UR.UR_PREFIX.length() + 1), BC32.decode(data));
-            }
-            default -> throw new IllegalArgumentException("Invalid number of fragments: expected 2 / 3 / 4 but got " + components.length);
+                String seqDigest = components[2];
+                String seqData = components[3];
+                checkDigest(seqDigest, fragment);
+                return new UR(components[0].substring(UR.UR_PREFIX.length() + 1), BC32.decode(seqData));
+            default:
+                throw new IllegalArgumentException("Invalid number of fragments: expected 2 / 3 / 4 but got " + components.length);
         }
     }
 
