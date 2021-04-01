@@ -101,7 +101,7 @@ public class FountainEncoder {
     }
 
     static int findNominalFragmentLength(int messageLen, int minFragmentLen, int maxFragmentLen) {
-        int maxFragmentCount = messageLen / minFragmentLen;
+        int maxFragmentCount = Math.max(1, messageLen / minFragmentLen);
         int fragmentLen = 0;
         for(int fragmentCount = 1; fragmentCount <= maxFragmentCount; fragmentCount++) {
             fragmentLen = (int)Math.ceil((double)messageLen / (double)fragmentCount);
