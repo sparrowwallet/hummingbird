@@ -50,20 +50,25 @@ while(true) {
 }
 ```
 
-Hummingbird also includes a type registry to assist with decoding from CBOR to POJOs:
+Hummingbird also includes a type registry to assist with encoding and decoding from CBOR to and from POJOs:
 
 ```java
 RegistryType urRegistryType = ur.getRegistryType();
 if(urRegistryType.equals(RegistryType.CRYPTO_PSBT)) {
     CryptoPSBT cryptoPSBT = (CryptoPSBT)ur.decodeFromRegistry();
+    UR cryptoPSBTUR = cryptoPSBT.toUR();
 } else if(urRegistryType.equals(RegistryType.CRYPTO_ADDRESS)) {
     CryptoAddress cryptoAddress = (CryptoAddress)ur.decodeFromRegistry();
+    UR cryptoAddressUR = cryptoAddress.toUR();
 } else if(urRegistryType.equals(RegistryType.CRYPTO_HDKEY)) {
     CryptoHDKey cryptoHDKey = (CryptoHDKey)ur.decodeFromRegistry();
+    UR cryptoHDKeyUR = cryptoHDKey.toUR();
 } else if(urRegistryType.equals(RegistryType.CRYPTO_OUTPUT)) {
     CryptoOutput cryptoOutput = (CryptoOutput)ur.decodeFromRegistry();
+    UR cryptoOutputUR = cryptoOutput.toUR();
 } else if(urRegistryType.equals(RegistryType.CRYPTO_ACCOUNT)) {
     CryptoAccount cryptoAccount = (CryptoAccount)ur.decodeFromRegistry();
+    UR cryptoAccountUR = cryptoAccount.toUR();
 }
 ```
 

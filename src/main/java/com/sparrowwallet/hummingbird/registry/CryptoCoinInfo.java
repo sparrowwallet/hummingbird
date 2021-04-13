@@ -16,6 +16,11 @@ public class CryptoCoinInfo extends RegistryItem {
         this.network = network;
     }
 
+    public CryptoCoinInfo(Type type, Network network) {
+        this.type = (type != null ? type.ordinal() : null);
+        this.network = (network != null ? network.ordinal() : null);
+    }
+
     public Type getType() {
         return type == null ? Type.BITCOIN : Type.values()[type];
     }
