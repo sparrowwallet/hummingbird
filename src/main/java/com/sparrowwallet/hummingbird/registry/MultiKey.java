@@ -8,7 +8,7 @@ import co.nstant.in.cbor.model.UnsignedInteger;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MultiKey {
+public class MultiKey implements CborSerializable {
     public static final int THRESHOLD_KEY = 1;
     public static final int KEYS_KEY = 2;
 
@@ -34,6 +34,27 @@ public class MultiKey {
         return hdKeys;
     }
 
+    public DataItem toCbor() {
+        Map map = new Map();
+        map.put(new UnsignedInteger(THRESHOLD_KEY), new UnsignedInteger(threshold));
+        Array array = new Array();
+        if(ecKeys != null && !ecKeys.isEmpty()) {
+            for(CryptoECKey cryptoECKey : ecKeys) {
+                DataItem eckeyItem = cryptoECKey.toCbor();
+                eckeyItem.setTag(RegistryType.CRYPTO_ECKEY.getTag());
+                array.add(eckeyItem);
+            }
+        } else if(hdKeys != null) {
+            for(CryptoHDKey cryptoHDKey : hdKeys) {
+                DataItem hdkeyItem = cryptoHDKey.toCbor();
+                hdkeyItem.setTag(RegistryType.CRYPTO_HDKEY.getTag());
+                array.add(hdkeyItem);
+            }
+        }
+        map.put(new UnsignedInteger(KEYS_KEY), array);
+        return map;
+    }
+
     public static MultiKey fromCbor(DataItem item) {
         int threshold = 0;
         List<CryptoECKey> ecKeys = new ArrayList<>();
@@ -55,6 +76,10 @@ public class MultiKey {
                     }
                 }
             }
+        }
+
+        if(ecKeys.isEmpty() && hdKeys.isEmpty()) {
+            throw new IllegalStateException("One or more of eckey or hdkey must be specified");
         }
 
         return new MultiKey(threshold, ecKeys, hdKeys);

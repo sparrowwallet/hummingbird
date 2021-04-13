@@ -17,5 +17,8 @@ public class CryptoAddressTest {
         List<DataItem> items = CborDecoder.decode(data);
         CryptoAddress cryptoAddress = CryptoAddress.fromCbor(items.get(0));
         Assert.assertEquals("77bff20c60e522dfaa3350c39b030a5d004e839a", TestUtils.bytesToHex(cryptoAddress.getData()));
+        Assert.assertEquals(hex.toLowerCase(), TestUtils.encode(cryptoAddress.toCbor()));
+        String ur = "ur:crypto-address/oyaxghktrswzbnhnvwcpurpkeogdsrndaxbkhlaegllsnyolrsemgu";
+        Assert.assertEquals(ur, cryptoAddress.toUR().toString());
     }
 }

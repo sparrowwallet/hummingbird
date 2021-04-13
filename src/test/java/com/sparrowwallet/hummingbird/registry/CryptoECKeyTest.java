@@ -19,5 +19,8 @@ public class CryptoECKeyTest {
         Assert.assertEquals(0, cryptoECKey.getCurve());
         Assert.assertTrue(cryptoECKey.isPrivateKey());
         Assert.assertEquals("8c05c4b4f3e88840a4f4b5f155cfd69473ea169f3d0431b7a6787a23777f08aa", TestUtils.bytesToHex(cryptoECKey.getData()));
+        Assert.assertEquals(hex.toLowerCase(), TestUtils.encode(cryptoECKey.toCbor()));
+        String ur = "ur:crypto-eckey/oeaoykaxhdcxlkahssqzwfvslofzoxwkrewngotktbmwjkwdcmnefsaaehrlolkskncnktlbaypkrphsmyid";
+        Assert.assertEquals(ur, cryptoECKey.toUR().toString());
     }
 }

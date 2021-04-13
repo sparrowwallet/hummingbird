@@ -1,5 +1,11 @@
 package com.sparrowwallet.hummingbird;
 
+import co.nstant.in.cbor.CborEncoder;
+import co.nstant.in.cbor.CborException;
+import co.nstant.in.cbor.model.DataItem;
+
+import java.io.ByteArrayOutputStream;
+
 public class TestUtils {
     public static byte[] hexToBytes(String s) {
         int len = s.length();
@@ -20,5 +26,12 @@ public class TestUtils {
             hexChars[j * 2 + 1] = HEX_ARRAY[v & 0x0F];
         }
         return new String(hexChars);
+    }
+
+    public static String encode(DataItem item) throws CborException {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        CborEncoder encoder = new CborEncoder(baos);
+        encoder.encode(item);
+        return bytesToHex(baos.toByteArray());
     }
 }

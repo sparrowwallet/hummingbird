@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class CryptoOutput {
+public class CryptoOutput extends RegistryItem {
     private final List<ScriptExpression> scriptExpressions;
 
     //Only one of the following will be not null
@@ -51,6 +51,37 @@ public class CryptoOutput {
 
     public MultiKey getMultiKey() {
         return multiKey;
+    }
+
+    public DataItem toCbor() {
+        DataItem item = null;
+        if(multiKey != null) {
+            item = multiKey.toCbor();
+        } else if(ecKey != null) {
+            item = ecKey.toCbor();
+            item.setTag(RegistryType.CRYPTO_ECKEY.getTag());
+        } else if(hdKey != null) {
+            item = hdKey.toCbor();
+            item.setTag(RegistryType.CRYPTO_HDKEY.getTag());
+        }
+
+        Tag tag = item.getTag();
+        for(int i = scriptExpressions.size() - 1; i >= 0; i--) {
+            Tag newTag = new Tag(scriptExpressions.get(i).getTagValue());
+            if(tag == null) {
+                item.setTag(newTag);
+            } else {
+                tag.setTag(newTag);
+            }
+            tag = newTag;
+        }
+
+        return item;
+    }
+
+    @Override
+    public RegistryType getRegistryType() {
+        return RegistryType.CRYPTO_OUTPUT;
     }
 
     public static CryptoOutput fromCbor(DataItem cbor) {

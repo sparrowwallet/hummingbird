@@ -2,11 +2,12 @@ package com.sparrowwallet.hummingbird.registry;
 
 import co.nstant.in.cbor.model.*;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class CryptoAccount {
+public class CryptoAccount extends RegistryItem {
     public static final long MASTER_FINGERPRINT_KEY = 1;
     public static final long OUTPUT_DESCRIPTORS_KEY = 2;
 
@@ -24,6 +25,22 @@ public class CryptoAccount {
 
     public List<CryptoOutput> getOutputDescriptors() {
         return outputDescriptors;
+    }
+
+    public DataItem toCbor() {
+        Map map = new Map();
+        map.put(new UnsignedInteger(MASTER_FINGERPRINT_KEY), new UnsignedInteger(new BigInteger(1, masterFingerprint)));
+        Array array = new Array();
+        for(CryptoOutput cryptoOutput : outputDescriptors) {
+            array.add(cryptoOutput.toCbor());
+        }
+        map.put(new UnsignedInteger(OUTPUT_DESCRIPTORS_KEY), array);
+        return map;
+    }
+
+    @Override
+    public RegistryType getRegistryType() {
+        return RegistryType.CRYPTO_ACCOUNT;
     }
 
     public static CryptoAccount fromCbor(DataItem cbor) {

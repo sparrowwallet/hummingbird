@@ -2,12 +2,13 @@ package com.sparrowwallet.hummingbird.registry;
 
 import co.nstant.in.cbor.model.*;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.StringJoiner;
 
-public class CryptoKeypath {
+public class CryptoKeypath extends RegistryItem {
     public static final int COMPONENTS_KEY = 1;
     public static final int SOURCE_FINGERPRINT_KEY = 2;
     public static final int DEPTH_KEY = 3;
@@ -48,6 +49,34 @@ public class CryptoKeypath {
 
     public Integer getDepth() {
         return depth;
+    }
+
+    public DataItem toCbor() {
+        Map map = new Map();
+        Array componentArray = new Array();
+        for(PathComponent pathComponent : components) {
+            if(pathComponent.isWildcard()) {
+                componentArray.add(new Array());
+            } else {
+                componentArray.add(new UnsignedInteger(pathComponent.getIndex()));
+            }
+            componentArray.add(pathComponent.isHardened() ? SimpleValue.TRUE : SimpleValue.FALSE);
+        }
+        if(!componentArray.getDataItems().isEmpty()) {
+            map.put(new UnsignedInteger(COMPONENTS_KEY), componentArray);
+        }
+        if(sourceFingerprint != null) {
+            map.put(new UnsignedInteger(SOURCE_FINGERPRINT_KEY), new UnsignedInteger(new BigInteger(1, sourceFingerprint)));
+        }
+        if(depth != null) {
+            map.put(new UnsignedInteger(DEPTH_KEY), new UnsignedInteger(depth));
+        }
+        return map;
+    }
+
+    @Override
+    public RegistryType getRegistryType() {
+        return RegistryType.CRYPTO_KEYPATH;
     }
 
     public static CryptoKeypath fromCbor(DataItem item) {

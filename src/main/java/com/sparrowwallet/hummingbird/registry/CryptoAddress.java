@@ -2,7 +2,7 @@ package com.sparrowwallet.hummingbird.registry;
 
 import co.nstant.in.cbor.model.*;
 
-public class CryptoAddress {
+public class CryptoAddress extends RegistryItem {
     public static final long INFO = 1;
     public static final long TYPE = 2;
     public static final long DATA = 3;
@@ -29,9 +29,26 @@ public class CryptoAddress {
         return data;
     }
 
+    public DataItem toCbor() {
+        Map map = new Map();
+        if(info != null) {
+            map.put(new UnsignedInteger(INFO), info.toCbor());
+        }
+        if(type != null) {
+            map.put(new UnsignedInteger(TYPE), new UnsignedInteger(type.ordinal()));
+        }
+        map.put(new UnsignedInteger(DATA), new ByteString(data));
+        return map;
+    }
+
+    @Override
+    public RegistryType getRegistryType() {
+        return RegistryType.CRYPTO_ADDRESS;
+    }
+
     public static CryptoAddress fromCbor(DataItem item) {
         CryptoCoinInfo info = null;
-        Type type = Type.P2PKH;
+        Type type = null;
         byte[] data = null;
 
         Map map = (Map)item;

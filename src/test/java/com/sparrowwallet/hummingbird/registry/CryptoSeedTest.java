@@ -22,5 +22,8 @@ public class CryptoSeedTest {
         CryptoSeed cryptoSeed = CryptoSeed.fromCbor(items.get(0));
         Assert.assertEquals("c7098580125e2ab0981253468b2dbc52", TestUtils.bytesToHex(cryptoSeed.getSeed()));
         Assert.assertEquals("12 May 2020", dateFormat.format(cryptoSeed.getBirthdate()));
+        Assert.assertEquals(hex.toLowerCase(), TestUtils.encode(cryptoSeed.toCbor()));
+        String ur = "ur:crypto-seed/oeadgdstaslplabghydrpfmkbggufgludprfgmaotpiecffltnlpqdenos";
+        Assert.assertEquals(ur, cryptoSeed.toUR().toString());
     }
 }

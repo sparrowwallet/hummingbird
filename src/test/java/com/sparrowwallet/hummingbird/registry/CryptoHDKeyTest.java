@@ -19,6 +19,9 @@ public class CryptoHDKeyTest {
         Assert.assertTrue(cryptoHDKey.isMaster());
         Assert.assertEquals("00e8f32e723decf4051aefac8e2c93c9c5b214313817cdb01a1494b917c8436b35", TestUtils.bytesToHex(cryptoHDKey.getKey()));
         Assert.assertEquals("873dff81c02f525623fd1fe5167eac3a55a049de3d314bb42ee227ffed37d508", TestUtils.bytesToHex(cryptoHDKey.getChainCode()));
+        Assert.assertEquals(hex.toLowerCase(), TestUtils.encode(cryptoHDKey.toCbor()));
+        String ur = "ur:crypto-hdkey/otadykaxhdclaevswfdmjpfswpwkahcywspsmndwmusoskprbbehetchsnpfcybbmwrhchspfxjeecaahdcxltfszmlyrtdlgmhfcnzcctvwcmkbpsftgonbgauefsehgrqzdmvodizmweemtlaybakiylat";
+        Assert.assertEquals(ur, cryptoHDKey.toUR().toString());
     }
 
     @Test
@@ -35,5 +38,8 @@ public class CryptoHDKeyTest {
         Assert.assertEquals("44'/1'/1'/0/1", cryptoHDKey.getOrigin().getPath());
         Assert.assertEquals("e9181cf3", TestUtils.bytesToHex(cryptoHDKey.getParentFingerprint()));
         Assert.assertNull(cryptoHDKey.getChildren());
+        Assert.assertEquals(hex.toLowerCase(), TestUtils.encode(cryptoHDKey.toCbor()));
+        String ur = "ur:crypto-hdkey/onaxhdclaojlvoechgferkdpqdiabdrflawshlhdmdcemtfnlrctghchbdolvwsednvdztbgolaahdcxtottgostdkhfdahdlykkecbbweskrymwflvdylgerkloswtbrpfdbsticmwylklpahtaadehoyaoadamtaaddyoyadlecsdwykadykadykaewkadwkaycywlcscewfihbdaehn";
+        Assert.assertEquals(ur, cryptoHDKey.toUR().toString());
     }
 }

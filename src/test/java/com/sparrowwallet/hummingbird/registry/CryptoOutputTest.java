@@ -20,6 +20,9 @@ public class CryptoOutputTest {
         CryptoOutput cryptoOutput = CryptoOutput.fromCbor(items.get(0));
         Assert.assertEquals(Collections.singletonList(ScriptExpression.PUBLIC_KEY_HASH), cryptoOutput.getScriptExpressions());
         Assert.assertEquals("02c6047f9441ed7d6d3045406e95c07cd85c778e4b8cef3ca7abac09b95c709ee5", TestUtils.bytesToHex(cryptoOutput.getEcKey().getData()));
+        Assert.assertEquals(hex, TestUtils.encode(cryptoOutput.toCbor()));
+        String ur = "ur:crypto-output/taadmutaadeyoyaxhdclaoswaalbmwfpwekijndyfefzjtmdrtketphhktmngrlkwsfnospypsasrhhhjonnvwtsqzwljy";
+        Assert.assertEquals(ur, cryptoOutput.toUR().toString());
     }
 
     @Test
@@ -30,6 +33,9 @@ public class CryptoOutputTest {
         CryptoOutput cryptoOutput = CryptoOutput.fromCbor(items.get(0));
         Assert.assertEquals(Arrays.asList(ScriptExpression.SCRIPT_HASH, ScriptExpression.WITNESS_PUBLIC_KEY_HASH), cryptoOutput.getScriptExpressions());
         Assert.assertEquals("03fff97bd5755eeea420453a14355235d382f6472f8568a18b2f057a1460297556", TestUtils.bytesToHex(cryptoOutput.getEcKey().getData()));
+        Assert.assertEquals(hex, TestUtils.encode(cryptoOutput.toCbor()));
+        String ur = "ur:crypto-output/taadmhtaadmwtaadeyoyaxhdclaxzmytkgtlkphywyoxcxfeftbbecgmectelfynfldllpisoyludlahknbbhndtkphfhlehmust";
+        Assert.assertEquals(ur, cryptoOutput.toUR().toString());
     }
 
     @Test
@@ -47,6 +53,10 @@ public class CryptoOutputTest {
 
         CryptoECKey secondKey = cryptoOutput.getMultiKey().getEcKeys().get(1);
         Assert.assertEquals("03acd484e2f0c7f65309ad178a9f559abde09796974c57e714c35f110dfc27ccbe", TestUtils.bytesToHex(secondKey.getData()));
+
+        Assert.assertEquals(hex, TestUtils.encode(cryptoOutput.toCbor()));
+        String ur = "ur:crypto-output/taadmhtaadmtoeadaoaolftaadeyoyaxhdclaodladvwvyhhsgeccapewflrfhrlbsfndlbkcwutahvwpeloleioksglwfvybkdradtaadeyoyaxhdclaxpstylrvowtstynguaspmchlenegonyryvtmsmtmsgshgvdbbsrhebybtztdisfrnpfadremh";
+        Assert.assertEquals(ur, cryptoOutput.toUR().toString());
     }
 
     @Test
@@ -63,6 +73,9 @@ public class CryptoOutputTest {
         Assert.assertEquals("78412e3a", TestUtils.bytesToHex(cryptoOutput.getHdKey().getParentFingerprint()));
         Assert.assertEquals("1/*", cryptoOutput.getHdKey().getChildren().getPath());
         Assert.assertNull(cryptoOutput.getHdKey().getChildren().getSourceFingerprint());
+        Assert.assertEquals(hex, TestUtils.encode(cryptoOutput.toCbor()));
+        String ur = "ur:crypto-output/taadmutaaddlonaxhdclaotdqdinaeesjzmolfzsbbidlpiyhddlcximhltirfsptlvsmohscsamsgzoaxadwtaahdcxiaksataxbtgotictnybnqdoslsmdbztsmtryatjoialnolweuramsfdtolhtbadtamtaaddyoeadlncsdwykaeykaeykaocytegtqdfhattaaddyoyadlradwklawkaycyksfpdmftpyaaeelb";
+        Assert.assertEquals(ur, cryptoOutput.toUR().toString());
     }
 
     @Test
@@ -92,5 +105,9 @@ public class CryptoOutputTest {
         Assert.assertNull(secondKey.getOrigin().getDepth());
         Assert.assertEquals("0/0/*", secondKey.getChildren().getPath());
         Assert.assertNull(secondKey.getChildren().getSourceFingerprint());
+
+        Assert.assertEquals(hex, TestUtils.encode(cryptoOutput.toCbor()));
+        String ur = "ur:crypto-output/taadmetaadmtoeadadaolftaaddloxaxhdclaxsbsgptsolkltkndsmskiaelfhhmdimcnmnlgutzotecpsfveylgrbdhptbpsveosaahdcxhnganelacwldjnlschnyfxjyplrllfdrplpswdnbuyctlpwyfmmhgsgtwsrymtldamtaaddyoyaxaeattaaddyoyadlnadwkaewklawktaaddloxaxhdclaoztnnhtwtpslgndfnwpzedrlomnclchrdfsayntlplplojznslfjejecpptlgbgwdaahdcxwtmhnyzmpkkbvdpyvwutglbeahmktyuogusnjonththhdwpsfzvdfpdlcndlkensamtaaddyoeadlfaewkaocyrycmrnvwattaaddyoyadlnaewkaewklawkkkztdlon";
+        Assert.assertEquals(ur, cryptoOutput.toUR().toString());
     }
 }

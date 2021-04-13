@@ -4,29 +4,45 @@ import co.nstant.in.cbor.model.DataItem;
 import co.nstant.in.cbor.model.Map;
 import co.nstant.in.cbor.model.UnsignedInteger;
 
-public class CryptoCoinInfo {
+public class CryptoCoinInfo extends RegistryItem {
     public static final int TYPE_KEY = 1;
     public static final int NETWORK_KEY = 2;
 
-    private final int type;
-    private final int network;
+    private final Integer type;
+    private final Integer network;
 
-    public CryptoCoinInfo(int type, int network) {
+    public CryptoCoinInfo(Integer type, Integer network) {
         this.type = type;
         this.network = network;
     }
 
     public Type getType() {
-        return Type.values()[type];
+        return type == null ? Type.BITCOIN : Type.values()[type];
     }
 
     public Network getNetwork() {
-        return Network.values()[network];
+        return network == null ? Network.MAINNET : Network.values()[network];
+    }
+
+    public DataItem toCbor() {
+        Map map = new Map();
+        if(type != null) {
+            map.put(new UnsignedInteger(TYPE_KEY), new UnsignedInteger(type));
+        }
+        if(network != null) {
+            map.put(new UnsignedInteger(NETWORK_KEY), new UnsignedInteger(network));
+        }
+        return map;
+    }
+
+    @Override
+    public RegistryType getRegistryType() {
+        return RegistryType.CRYPTO_COIN_INFO;
     }
 
     public static CryptoCoinInfo fromCbor(DataItem item) {
-        int type = 0;
-        int network = 0;
+        Integer type = null;
+        Integer network = null;
 
         Map map = (Map)item;
         for(DataItem key : map.getKeys()) {
