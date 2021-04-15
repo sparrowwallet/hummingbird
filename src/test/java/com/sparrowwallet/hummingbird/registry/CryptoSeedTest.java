@@ -10,9 +10,10 @@ import org.junit.Test;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Locale;
 
 public class CryptoSeedTest {
-    private final DateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy");
+    private final DateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy", Locale.ENGLISH);
 
     @Test
     public void testSeed() throws CborException {
