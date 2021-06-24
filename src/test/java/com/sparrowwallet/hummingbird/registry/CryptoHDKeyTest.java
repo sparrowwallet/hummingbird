@@ -36,10 +36,29 @@ public class CryptoHDKeyTest {
         Assert.assertEquals("ced155c72456255881793514edc5bd9447e7f74abb88c6d6b6480fd016ee8c85", TestUtils.bytesToHex(cryptoHDKey.getChainCode()));
         Assert.assertEquals(cryptoHDKey.getUseInfo().getNetwork(), CryptoCoinInfo.Network.TESTNET);
         Assert.assertEquals("44'/1'/1'/0/1", cryptoHDKey.getOrigin().getPath());
+        Assert.assertNull(cryptoHDKey.getOrigin().getDepth());
         Assert.assertEquals("e9181cf3", TestUtils.bytesToHex(cryptoHDKey.getParentFingerprint()));
         Assert.assertNull(cryptoHDKey.getChildren());
         Assert.assertEquals(hex.toLowerCase(), TestUtils.encode(cryptoHDKey.toCbor()));
         String ur = "ur:crypto-hdkey/onaxhdclaojlvoechgferkdpqdiabdrflawshlhdmdcemtfnlrctghchbdolvwsednvdztbgolaahdcxtottgostdkhfdahdlykkecbbweskrymwflvdylgerkloswtbrpfdbsticmwylklpahtaadehoyaoadamtaaddyoyadlecsdwykadykadykaewkadwkaycywlcscewfihbdaehn";
+        Assert.assertEquals(ur, cryptoHDKey.toUR().toString());
+    }
+
+
+    @Test
+    public void testMasterPublicKey() throws CborException {
+        String hex = "A303582103AC3DF08EC59F6F1CDC55B3007F90F1A98435EC345C3CAC400EDE1DD533D75FA9045820E8145DB627E79188E14C1FD6C772998509961D358FE8ECF3D7CC43BB1D0F952006D90130A20180021A854BC782";
+        byte[] data = TestUtils.hexToBytes(hex);
+        List<DataItem> items = CborDecoder.decode(data);
+        CryptoHDKey cryptoHDKey = CryptoHDKey.fromCbor(items.get(0));
+        Assert.assertFalse(cryptoHDKey.isMaster());
+        Assert.assertFalse(cryptoHDKey.isPrivateKey());
+        Assert.assertEquals("03ac3df08ec59f6f1cdc55b3007f90f1a98435ec345c3cac400ede1dd533d75fa9", TestUtils.bytesToHex(cryptoHDKey.getKey()));
+        Assert.assertEquals("e8145db627e79188e14c1fd6c772998509961d358fe8ecf3d7cc43bb1d0f9520", TestUtils.bytesToHex(cryptoHDKey.getChainCode()));
+        Assert.assertNull(cryptoHDKey.getOrigin().getPath());
+        Assert.assertEquals("854bc782", TestUtils.bytesToHex(cryptoHDKey.getOrigin().getSourceFingerprint()));
+        Assert.assertEquals(hex.toLowerCase(), TestUtils.encode(cryptoHDKey.toCbor()));
+        String ur = "ur:crypto-hdkey/otaxhdclaxpsfswtmnsknejlceuogoqdaelbmhwnptlrecwpeehhfnpsfzbauecatleotsheptaahdcxvsbbhlrpdivdmelovygscttbstjpnllpasmtcaecmyvswpwftssffxrkcabsmdcxamtaaddyoeadlaaocylpgrstlfiewtseje";
         Assert.assertEquals(ur, cryptoHDKey.toUR().toString());
     }
 }
