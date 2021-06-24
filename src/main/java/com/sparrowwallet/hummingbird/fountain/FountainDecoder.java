@@ -30,7 +30,7 @@ public class FountainDecoder {
     private final List<Part> queuedParts = new ArrayList<>();
 
     public int getExpectedPartCount() {
-        return expectedPartIndexes.size();
+        return expectedPartIndexes == null ? 0 : expectedPartIndexes.size();
     }
 
     public Set<Integer> getRecievedPartIndexes() {
@@ -46,6 +46,10 @@ public class FountainDecoder {
     }
 
     public double getEstimatedPercentComplete() {
+        if(processedPartsCount == 0) {
+            return 0d;
+        }
+
         double estimatedInputParts = (double)getExpectedPartCount() * 1.75;
         return Math.min(0.99, (double)processedPartsCount / estimatedInputParts);
     }
