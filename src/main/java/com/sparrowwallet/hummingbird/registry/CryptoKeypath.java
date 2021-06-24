@@ -62,9 +62,7 @@ public class CryptoKeypath extends RegistryItem {
             }
             componentArray.add(pathComponent.isHardened() ? SimpleValue.TRUE : SimpleValue.FALSE);
         }
-        if(!componentArray.getDataItems().isEmpty()) {
-            map.put(new UnsignedInteger(COMPONENTS_KEY), componentArray);
-        }
+        map.put(new UnsignedInteger(COMPONENTS_KEY), componentArray);
         if(sourceFingerprint != null) {
             map.put(new UnsignedInteger(SOURCE_FINGERPRINT_KEY), new UnsignedInteger(new BigInteger(1, sourceFingerprint)));
         }
