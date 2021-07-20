@@ -61,4 +61,38 @@ public class CryptoHDKeyTest {
         String ur = "ur:crypto-hdkey/otaxhdclaxpsfswtmnsknejlceuogoqdaelbmhwnptlrecwpeehhfnpsfzbauecatleotsheptaahdcxvsbbhlrpdivdmelovygscttbstjpnllpasmtcaecmyvswpwftssffxrkcabsmdcxamtaaddyoeadlaaocylpgrstlfiewtseje";
         Assert.assertEquals(ur, cryptoHDKey.toUR().toString());
     }
+
+    @Test
+    public void testZeroMasterFingerprint() throws CborException {
+        String hex = "a303582103ac3df08ec59f6f1cdc55b3007f90f1a98435ec345c3cac400ede1dd533d75fa9045820e8145db627e79188e14c1fd6c772998509961d358fe8ecf3d7cc43bb1d0f952006d90130a201800200";
+        byte[] data = TestUtils.hexToBytes(hex);
+        List<DataItem> items = CborDecoder.decode(data);
+        CryptoHDKey cryptoHDKey = CryptoHDKey.fromCbor(items.get(0));
+        Assert.assertFalse(cryptoHDKey.isMaster());
+        Assert.assertFalse(cryptoHDKey.isPrivateKey());
+        Assert.assertEquals("03ac3df08ec59f6f1cdc55b3007f90f1a98435ec345c3cac400ede1dd533d75fa9", TestUtils.bytesToHex(cryptoHDKey.getKey()));
+        Assert.assertEquals("e8145db627e79188e14c1fd6c772998509961d358fe8ecf3d7cc43bb1d0f9520", TestUtils.bytesToHex(cryptoHDKey.getChainCode()));
+        Assert.assertNull(cryptoHDKey.getOrigin().getPath());
+        Assert.assertEquals("00000000", TestUtils.bytesToHex(cryptoHDKey.getOrigin().getSourceFingerprint()));
+        Assert.assertEquals(hex.toLowerCase(), TestUtils.encode(cryptoHDKey.toCbor()));
+        String ur = "ur:crypto-hdkey/otaxhdclaxpsfswtmnsknejlceuogoqdaelbmhwnptlrecwpeehhfnpsfzbauecatleotsheptaahdcxvsbbhlrpdivdmelovygscttbstjpnllpasmtcaecmyvswpwftssffxrkcabsmdcxamtaaddyoeadlaaoaebkoxdive";
+        Assert.assertEquals(ur, cryptoHDKey.toUR().toString());
+    }
+
+    @Test
+    public void testShortMasterFingerprint() throws CborException {
+        String hex = "A303582103AC3DF08EC59F6F1CDC55B3007F90F1A98435EC345C3CAC400EDE1DD533D75FA9045820E8145DB627E79188E14C1FD6C772998509961D358FE8ECF3D7CC43BB1D0F952006D90130A201800218FF";
+        byte[] data = TestUtils.hexToBytes(hex);
+        List<DataItem> items = CborDecoder.decode(data);
+        CryptoHDKey cryptoHDKey = CryptoHDKey.fromCbor(items.get(0));
+        Assert.assertFalse(cryptoHDKey.isMaster());
+        Assert.assertFalse(cryptoHDKey.isPrivateKey());
+        Assert.assertEquals("03ac3df08ec59f6f1cdc55b3007f90f1a98435ec345c3cac400ede1dd533d75fa9", TestUtils.bytesToHex(cryptoHDKey.getKey()));
+        Assert.assertEquals("e8145db627e79188e14c1fd6c772998509961d358fe8ecf3d7cc43bb1d0f9520", TestUtils.bytesToHex(cryptoHDKey.getChainCode()));
+        Assert.assertNull(cryptoHDKey.getOrigin().getPath());
+        Assert.assertEquals("000000ff", TestUtils.bytesToHex(cryptoHDKey.getOrigin().getSourceFingerprint()));
+        Assert.assertEquals(hex.toLowerCase(), TestUtils.encode(cryptoHDKey.toCbor()));
+        String ur = "ur:crypto-hdkey/otaxhdclaxpsfswtmnsknejlceuogoqdaelbmhwnptlrecwpeehhfnpsfzbauecatleotsheptaahdcxvsbbhlrpdivdmelovygscttbstjpnllpasmtcaecmyvswpwftssffxrkcabsmdcxamtaaddyoeadlaaocszmtnkocyct";
+        Assert.assertEquals(ur, cryptoHDKey.toUR().toString());
+    }
 }

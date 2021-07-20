@@ -47,12 +47,13 @@ public class CryptoAccount extends RegistryItem {
         Map cryptoAccountMap = (Map)cbor;
 
         UnsignedInteger uintMasterFingerprint = (UnsignedInteger)cryptoAccountMap.get(new UnsignedInteger(MASTER_FINGERPRINT_KEY));
+        byte[] masterFingerprint = bigIntegerToBytes(uintMasterFingerprint.getValue(), 4);
         Array outputDescriptors = (Array)cryptoAccountMap.get(new UnsignedInteger(OUTPUT_DESCRIPTORS_KEY));
         List<CryptoOutput> cryptoOutputs = new ArrayList<>(outputDescriptors.getDataItems().size());
         for(DataItem item : outputDescriptors.getDataItems()) {
             cryptoOutputs.add(CryptoOutput.fromCbor(item));
         }
 
-        return new CryptoAccount(uintMasterFingerprint.getValue().toByteArray(), cryptoOutputs);
+        return new CryptoAccount(masterFingerprint, cryptoOutputs);
     }
 }

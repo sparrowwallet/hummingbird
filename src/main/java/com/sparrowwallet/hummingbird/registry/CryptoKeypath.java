@@ -99,7 +99,7 @@ public class CryptoKeypath extends RegistryItem {
                     }
                 }
             } else if(intKey == SOURCE_FINGERPRINT_KEY) {
-                sourceFingerprint = ((UnsignedInteger)map.get(key)).getValue().toByteArray();
+                sourceFingerprint = bigIntegerToBytes(((UnsignedInteger)map.get(key)).getValue(), 4);
             } else if(intKey == DEPTH_KEY) {
                 depth = ((UnsignedInteger)map.get(key)).getValue().intValue();
             }

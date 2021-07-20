@@ -176,7 +176,7 @@ public class CryptoHDKey extends RegistryItem {
             } else if(intKey == CHILDREN_KEY) {
                 children = CryptoKeypath.fromCbor(map.get(uintKey));
             } else if(intKey == PARENT_FINGERPRINT_KEY) {
-                parentFingerprint = ((UnsignedInteger)map.get(uintKey)).getValue().toByteArray();
+                parentFingerprint = bigIntegerToBytes(((UnsignedInteger)map.get(uintKey)).getValue(), 4);
             } else if(intKey == NAME_KEY) {
                 name = ((UnicodeString)map.get(uintKey)).getString();
             } else if(intKey == NOTE_KEY) {
