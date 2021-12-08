@@ -32,7 +32,13 @@ public class CryptoAccount extends RegistryItem {
         map.put(new UnsignedInteger(MASTER_FINGERPRINT_KEY), new UnsignedInteger(new BigInteger(1, masterFingerprint)));
         Array array = new Array();
         for(CryptoOutput cryptoOutput : outputDescriptors) {
-            array.add(cryptoOutput.toCbor());
+            DataItem dataItem = cryptoOutput.toCbor();
+            DataItem tag = dataItem.getTag() == null ? dataItem : dataItem.getTag();
+            while(tag.getTag() != null) {
+                tag = tag.getTag();
+            }
+            tag.setTag(RegistryType.CRYPTO_OUTPUT.getTag());
+            array.add(dataItem);
         }
         map.put(new UnsignedInteger(OUTPUT_DESCRIPTORS_KEY), array);
         return map;

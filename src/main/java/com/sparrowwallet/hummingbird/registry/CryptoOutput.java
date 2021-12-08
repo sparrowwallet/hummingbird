@@ -89,7 +89,7 @@ public class CryptoOutput extends RegistryItem {
 
         Tag tag = cbor.getTag();
         do {
-            if(tag.getValue() != RegistryType.CRYPTO_HDKEY.getTag() && tag.getValue() != RegistryType.CRYPTO_ECKEY.getTag()) {
+            if(tag.getValue() != RegistryType.CRYPTO_HDKEY.getTag() && tag.getValue() != RegistryType.CRYPTO_ECKEY.getTag() && tag.getValue() != RegistryType.CRYPTO_OUTPUT.getTag()) {
                 expressions.add(ScriptExpression.fromTagValue(tag.getValue()));
             }
             tag = tag.getTag();

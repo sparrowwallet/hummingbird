@@ -11,7 +11,8 @@ public enum ScriptExpression {
     SORTED_MULTISIG(407, "sorted"),
     ADDRESS(307, "addr"),
     RAW_SCRIPT(408, "raw"),
-    TAPROOT(409, "tr");
+    TAPROOT(409, "tr"),
+    COSIGNER(410, "cosigner");
 
     private final int tagValue;
     private final String expression;
