@@ -16,7 +16,7 @@ public enum RegistryType {
     CRYPTO_BIP39("crypto-bip39", 301, CryptoBip39.class),
     CRYPTO_HDKEY("crypto-hdkey", 303, CryptoHDKey.class),
     CRYPTO_KEYPATH("crypto-keypath", 304, CryptoKeypath.class),
-    CRYPTO_COIN_INFO("crypto-coin-info", 305, CryptoCoinInfo.class),
+    CRYPTO_COIN_INFO("crypto-coininfo", 305, CryptoCoinInfo.class),
     CRYPTO_ECKEY("crypto-eckey", 306, CryptoECKey.class),
     CRYPTO_ADDRESS("crypto-address", 307, CryptoAddress.class),
     CRYPTO_OUTPUT("crypto-output", 308, CryptoOutput.class),
