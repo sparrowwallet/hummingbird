@@ -17,12 +17,12 @@ public class CryptoCoinInfo extends RegistryItem {
     }
 
     public CryptoCoinInfo(Type type, Network network) {
-        this.type = (type != null ? type.ordinal() : null);
+        this.type = (type != null ? type.typeValue : null);
         this.network = (network != null ? network.ordinal() : null);
     }
 
     public Type getType() {
-        return type == null ? Type.BITCOIN : Type.values()[type];
+        return type == null ? Type.BITCOIN : Type.getTypeFromValue(type);
     }
 
     public Network getNetwork() {
@@ -65,7 +65,23 @@ public class CryptoCoinInfo extends RegistryItem {
     }
 
     public enum Type {
-        BITCOIN
+        BITCOIN(0), ETHEREUM(60);
+
+        Integer typeValue;
+
+        Type(Integer typeValue) {
+            this.typeValue = typeValue;
+        }
+
+        static Type getTypeFromValue(int value) {
+            for (int i = 0; i < Type.values().length; i++) {
+                Type current = Type.values()[i];
+                if(value == current.typeValue) {
+                    return current;
+                }
+            }
+            return null;
+        }
     }
 
     public enum Network {
