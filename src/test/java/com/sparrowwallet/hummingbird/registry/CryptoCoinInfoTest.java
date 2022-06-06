@@ -18,6 +18,18 @@ public class CryptoCoinInfoTest {
     }
 
     @Test
+    public void testBitcoinTypeCoinInfo() {
+        CryptoCoinInfo coinInfo = new CryptoCoinInfo(CryptoCoinInfo.Type.BITCOIN, CryptoCoinInfo.Network.MAINNET);
+        Assert.assertSame(coinInfo.getType(), CryptoCoinInfo.Type.BITCOIN);
+    }
+
+    @Test
+    public void testEthereumTypeCoinInfo() {
+        CryptoCoinInfo coinInfo = new CryptoCoinInfo(CryptoCoinInfo.Type.ETHEREUM, CryptoCoinInfo.Network.MAINNET);
+        Assert.assertSame(coinInfo.getType(), CryptoCoinInfo.Type.ETHEREUM);
+    }
+
+    @Test
     public void testNullTypeCoinInfo() {
         CryptoCoinInfo coinInfo = new CryptoCoinInfo(null, CryptoCoinInfo.Network.MAINNET);
         Assert.assertSame(coinInfo.getType(), CryptoCoinInfo.Type.BITCOIN);
