@@ -73,9 +73,9 @@ public class CryptoCoinInfo extends RegistryItem {
     public enum Type {
         BITCOIN(0), ETHEREUM(60);
 
-        int typeValue;
+        Integer typeValue;
 
-        Type(int typeValue) {
+        Type(Integer typeValue) {
             this.typeValue = typeValue;
         }
 
@@ -93,9 +93,9 @@ public class CryptoCoinInfo extends RegistryItem {
     public enum Network {
         MAINNET(0), TESTNET(1), GOERLI(4);
 
-        int networkValue;
+        Integer networkValue;
 
-        Network(int networkValue) {
+        Network(Integer networkValue) {
             this.networkValue = networkValue;
         }
 
