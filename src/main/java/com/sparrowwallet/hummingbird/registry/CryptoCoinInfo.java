@@ -37,10 +37,10 @@ public class CryptoCoinInfo extends RegistryItem {
 
     public DataItem toCbor() {
         Map map = new Map();
-        if (type != null) {
+        if(type != null) {
             map.put(new UnsignedInteger(TYPE_KEY), new UnsignedInteger(type));
         }
-        if (network != null) {
+        if(network != null) {
             map.put(new UnsignedInteger(NETWORK_KEY), new UnsignedInteger(network));
         }
         return map;
@@ -55,15 +55,15 @@ public class CryptoCoinInfo extends RegistryItem {
         Integer type = null;
         Integer network = null;
 
-        Map map = (Map) item;
-        for (DataItem key : map.getKeys()) {
-            UnsignedInteger uintKey = (UnsignedInteger) key;
+        Map map = (Map)item;
+        for(DataItem key : map.getKeys()) {
+            UnsignedInteger uintKey = (UnsignedInteger)key;
             int intKey = uintKey.getValue().intValue();
 
-            if (intKey == TYPE_KEY) {
-                type = ((UnsignedInteger) map.get(key)).getValue().intValue();
-            } else if (intKey == NETWORK_KEY) {
-                network = ((UnsignedInteger) map.get(key)).getValue().intValue();
+            if(intKey == TYPE_KEY) {
+                type = ((UnsignedInteger)map.get(key)).getValue().intValue();
+            } else if(intKey == NETWORK_KEY) {
+                network = ((UnsignedInteger)map.get(key)).getValue().intValue();
             }
         }
 
@@ -82,7 +82,7 @@ public class CryptoCoinInfo extends RegistryItem {
         static Type getTypeFromValue(int value) {
             for (int i = 0; i < Type.values().length; i++) {
                 Type current = Type.values()[i];
-                if (value == current.typeValue) {
+                if(value == current.typeValue) {
                     return current;
                 }
             }
