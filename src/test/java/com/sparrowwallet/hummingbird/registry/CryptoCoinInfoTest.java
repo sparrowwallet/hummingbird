@@ -18,15 +18,20 @@ public class CryptoCoinInfoTest {
     }
 
     @Test
-    public void testBitcoinTypeCoinInfo() {
-        CryptoCoinInfo coinInfo = new CryptoCoinInfo(CryptoCoinInfo.Type.BITCOIN, CryptoCoinInfo.Network.MAINNET);
-        Assert.assertSame(coinInfo.getType(), CryptoCoinInfo.Type.BITCOIN);
+    public void testGoerliEthereumCoinInfo() {
+        CryptoCoinInfo coinInfo = new CryptoCoinInfo(CryptoCoinInfo.Type.ETHEREUM, CryptoCoinInfo.Network.GOERLI);
+        Assert.assertSame(coinInfo.getType().typeValue, CryptoCoinInfo.Type.ETHEREUM.typeValue);
+        Assert.assertSame(coinInfo.getNetwork().networkValue, CryptoCoinInfo.Network.GOERLI.networkValue);
     }
 
-    @Test
-    public void testEthereumTypeCoinInfo() {
-        CryptoCoinInfo coinInfo = new CryptoCoinInfo(CryptoCoinInfo.Type.ETHEREUM, CryptoCoinInfo.Network.MAINNET);
-        Assert.assertSame(coinInfo.getType(), CryptoCoinInfo.Type.ETHEREUM);
+    @Test(expected = IllegalArgumentException.class)
+    public void testGoerliSupportedOnlyWithEthereum() {
+        new CryptoCoinInfo(CryptoCoinInfo.Type.BITCOIN, CryptoCoinInfo.Network.GOERLI);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testGoerliSupportedOnlyWithEthereumWithValues() {
+        new CryptoCoinInfo(CryptoCoinInfo.Type.BITCOIN.typeValue, CryptoCoinInfo.Network.GOERLI.networkValue);
     }
 
     @Test

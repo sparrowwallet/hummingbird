@@ -12,13 +12,19 @@ public class CryptoCoinInfo extends RegistryItem {
     private final Integer network;
 
     public CryptoCoinInfo(Integer type, Integer network) {
+        if(network.equals(Network.GOERLI.networkValue) && !type.equals(Type.ETHEREUM.typeValue)) {
+            throw new IllegalArgumentException("Goerli network can only be selected for Ethereum");
+        }
         this.type = type;
         this.network = network;
     }
 
     public CryptoCoinInfo(Type type, Network network) {
+        if(network == Network.GOERLI && type != Type.ETHEREUM) {
+            throw new IllegalArgumentException("Goerli network can only be selected for Ethereum");
+        }
         this.type = (type != null ? type.typeValue : null);
-        this.network = (network != null ? network.ordinal() : null);
+        this.network = (network != null ? network.networkValue : null);
     }
 
     public Type getType() {
@@ -26,7 +32,7 @@ public class CryptoCoinInfo extends RegistryItem {
     }
 
     public Network getNetwork() {
-        return network == null ? Network.MAINNET : Network.values()[network];
+        return network == null ? Network.MAINNET : Network.getNetworkFromValue(network);
     }
 
     public DataItem toCbor() {
@@ -85,6 +91,22 @@ public class CryptoCoinInfo extends RegistryItem {
     }
 
     public enum Network {
-        MAINNET, TESTNET
+        MAINNET(0), TESTNET(1), GOERLI(4);
+
+        Integer networkValue;
+
+        Network(Integer networkValue) {
+            this.networkValue = networkValue;
+        }
+
+        static Network getNetworkFromValue(int value) {
+            for (int i = 0; i < Network.values().length; i++) {
+                Network current = Network.values()[i];
+                if (value == current.networkValue) {
+                    return current;
+                }
+            }
+            return null;
+        }
     }
 }
