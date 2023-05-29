@@ -1,6 +1,7 @@
 package com.sparrowwallet.hummingbird.registry;
 
 import co.nstant.in.cbor.model.*;
+import com.sparrowwallet.hummingbird.registry.pathcomponent.PathComponent;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -38,7 +39,7 @@ public class CryptoKeypath extends RegistryItem {
 
         StringJoiner joiner = new StringJoiner("/");
         for(PathComponent component : components) {
-            joiner.add((component.isWildcard() ? "*" : component.getIndex()) + (component.isHardened() ? "'" : ""));
+            joiner.add(component.toString());
         }
         return joiner.toString();
     }
@@ -53,16 +54,7 @@ public class CryptoKeypath extends RegistryItem {
 
     public DataItem toCbor() {
         Map map = new Map();
-        Array componentArray = new Array();
-        for(PathComponent pathComponent : components) {
-            if(pathComponent.isWildcard()) {
-                componentArray.add(new Array());
-            } else {
-                componentArray.add(new UnsignedInteger(pathComponent.getIndex()));
-            }
-            componentArray.add(pathComponent.isHardened() ? SimpleValue.TRUE : SimpleValue.FALSE);
-        }
-        map.put(new UnsignedInteger(COMPONENTS_KEY), componentArray);
+        map.put(new UnsignedInteger(COMPONENTS_KEY), PathComponent.toCbor(components));
         if(sourceFingerprint != null) {
             map.put(new UnsignedInteger(SOURCE_FINGERPRINT_KEY), new UnsignedInteger(new BigInteger(1, sourceFingerprint)));
         }
@@ -87,17 +79,7 @@ public class CryptoKeypath extends RegistryItem {
             UnsignedInteger uintKey = (UnsignedInteger)key;
             int intKey = uintKey.getValue().intValue();
             if(intKey == COMPONENTS_KEY) {
-                Array componentArray = (Array)map.get(key);
-                for(int i = 0; i < componentArray.getDataItems().size(); i+=2) {
-                    boolean hardened = (componentArray.getDataItems().get(i+1) == SimpleValue.TRUE);
-                    DataItem pathSeg = componentArray.getDataItems().get(i);
-                    if(pathSeg instanceof UnsignedInteger) {
-                        UnsignedInteger uintIndex = (UnsignedInteger)pathSeg;
-                        components.add(new PathComponent(uintIndex.getValue().intValue(), hardened));
-                    } else if(pathSeg instanceof Array) {
-                        components.add(new PathComponent(hardened));
-                    }
-                }
+                components = PathComponent.fromCbor(map.get(key));
             } else if(intKey == SOURCE_FINGERPRINT_KEY) {
                 sourceFingerprint = bigIntegerToBytes(((UnsignedInteger)map.get(key)).getValue(), 4);
             } else if(intKey == DEPTH_KEY) {
