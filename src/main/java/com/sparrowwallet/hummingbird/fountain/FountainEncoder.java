@@ -181,5 +181,41 @@ public class FountainEncoder {
 
             return new Part(seqNum.getValue().longValue(), seqLen.getValue().intValue(), messageLen.getValue().intValue(), checksum.getValue().longValue(), data.getBytes());
         }
+
+        @Override
+        public boolean equals(Object o) {
+            if(this == o) {
+                return true;
+            }
+            if(o == null || getClass() != o.getClass()) {
+                return false;
+            }
+
+            Part part = (Part) o;
+
+            if(seqNum != part.seqNum) {
+                return false;
+            }
+            if(seqLen != part.seqLen) {
+                return false;
+            }
+            if(messageLen != part.messageLen) {
+                return false;
+            }
+            if(checksum != part.checksum) {
+                return false;
+            }
+            return Arrays.equals(data, part.data);
+        }
+
+        @Override
+        public int hashCode() {
+            int result = (int) (seqNum ^ (seqNum >>> 32));
+            result = 31 * result + seqLen;
+            result = 31 * result + messageLen;
+            result = 31 * result + (int) (checksum ^ (checksum >>> 32));
+            result = 31 * result + Arrays.hashCode(data);
+            return result;
+        }
     }
 }

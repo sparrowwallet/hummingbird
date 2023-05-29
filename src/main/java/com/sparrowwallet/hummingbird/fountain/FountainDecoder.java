@@ -16,6 +16,7 @@ import static com.sparrowwallet.hummingbird.fountain.FountainUtils.chooseFragmen
 public class FountainDecoder {
     private final Set<Integer> recievedPartIndexes = new TreeSet<>();
     private Set<Integer> lastPartIndexes;
+    private final Set<Integer> processedPartHashes = new HashSet<>();
     private int processedPartsCount = 0;
     private Result result;
     private long checksum;
@@ -114,8 +115,10 @@ public class FountainDecoder {
             processQueueItem();
         }
 
-        // Keep track of how many parts we've processed
-        processedPartsCount += 1;
+        // Keep track of how many unique parts we've processed
+        if(processedPartHashes.add(encoderPart.hashCode())) {
+            processedPartsCount++;
+        }
         //printPartEnd();
 
         return true;

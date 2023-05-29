@@ -216,4 +216,26 @@ public class URTest {
         Assert.assertEquals(TestUtils.bytesToHex(ur.toBytes()), "70736274ff0100520200000001adb4134883273f90371c364743e1816de7099df3895dbc95ebcd19beb83200ec0000000000ffffffff01e80300000000000016001457766b7686ca60e5221119966bdfe1d1f4b62181000000000001011f581b0000000000001600145da1bc9a730b7e9d209f15aff9c096f6bbd89d26220603ccd4532b1350e04cbaff91056bdb08bd3877b4fcb8cd70aaeda5239ce112547b180000000054000080000000800000008000000000060000000000");
         Arrays.stream(fragments).forEach(part -> Assert.assertTrue(LegacyURDecoder.isLegacyURFragment(part)));
     }
+
+    @Test
+    public void testDuplicateDecode() {
+        String[] parts = new String[] {
+                "ur:bytes/1-9/lpadascfadaxcywenbpljkhdcahkadaemejtswhhylkepmykhhtsytsnoyoyaxaedsuttydmmhhpktpmsrjtdkgslpgh",
+                "ur:bytes/2-9/lpaoascfadaxcywenbpljkhdcagwdpfnsboxgwlbaawzuefywkdplrsrjynbvygabwjldapfcsgmghhkhstlrdcxaefz",
+                "ur:bytes/3-9/lpaxascfadaxcywenbpljkhdcahelbknlkuejnbadmssfhfrdpsbiegecpasvssovlgeykssjykklronvsjksopdzmol"
+        };
+
+        URDecoder urDecoder = new URDecoder();
+        Assert.assertEquals(0, urDecoder.getProcessedPartsCount());
+        urDecoder.receivePart(parts[0]);
+        Assert.assertEquals(1, urDecoder.getProcessedPartsCount());
+        urDecoder.receivePart(parts[0]);
+        Assert.assertEquals(1, urDecoder.getProcessedPartsCount());
+        urDecoder.receivePart(parts[1]);
+        Assert.assertEquals(2, urDecoder.getProcessedPartsCount());
+        urDecoder.receivePart(parts[0]);
+        Assert.assertEquals(2, urDecoder.getProcessedPartsCount());
+        urDecoder.receivePart(parts[2]);
+        Assert.assertEquals(3, urDecoder.getProcessedPartsCount());
+    }
 }
