@@ -22,7 +22,17 @@ public enum RegistryType {
     CRYPTO_OUTPUT("crypto-output", 308, CryptoOutput.class),
     CRYPTO_SSKR("crypto-sskr", 309, CryptoSskr.class),
     CRYPTO_PSBT("crypto-psbt", 310, CryptoPSBT.class),
-    CRYPTO_ACCOUNT("crypto-account", 311, CryptoAccount.class);
+    CRYPTO_ACCOUNT("crypto-account", 311, CryptoAccount.class),
+    SEED("seed", 40300, URSeed.class),
+    HDKEY("hdkey", 40303, URHDKey.class),
+    KEYPATH("keypath", 40304, URKeypath.class),
+    COIN_INFO("coininfo", 40305, URCoinInfo.class),
+    ECKEY("eckey", 40306, URECKey.class),
+    ADDRESS("address", 40307, URAddress.class),
+    OUTPUT_DESCRIPTOR("output-descriptor", 40308, UROutputDescriptor.class),
+    SSKR("sskr", 40309, URSSKR.class),
+    PSBT("psbt", 40310, URPSBT.class),
+    ACCOUNT("account", 40311, URAccount.class);
 
     private final String type;
     private final Integer tag;
