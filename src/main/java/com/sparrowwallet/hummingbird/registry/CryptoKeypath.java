@@ -19,7 +19,7 @@ public class CryptoKeypath extends RegistryItem {
     private final Integer depth;
 
     public CryptoKeypath(List<PathComponent> components, byte[] sourceFingerprint) {
-        this(components, sourceFingerprint, 0);
+        this(components, sourceFingerprint, null);
     }
 
     public CryptoKeypath(List<PathComponent> components, byte[] sourceFingerprint, Integer depth) {

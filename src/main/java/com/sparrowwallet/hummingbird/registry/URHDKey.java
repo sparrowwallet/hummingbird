@@ -7,11 +7,11 @@ public class URHDKey extends CryptoHDKey {
         super(key, chainCode);
     }
 
-    public URHDKey(Boolean privateKey, byte[] key, byte[] chainCode, CryptoCoinInfo useInfo, CryptoKeypath origin, CryptoKeypath children, byte[] parentFingerprint) {
+    public URHDKey(Boolean privateKey, byte[] key, byte[] chainCode, URCoinInfo useInfo, URKeypath origin, URKeypath children, byte[] parentFingerprint) {
         super(privateKey, key, chainCode, useInfo, origin, children, parentFingerprint);
     }
 
-    public URHDKey(Boolean privateKey, byte[] key, byte[] chainCode, CryptoCoinInfo useInfo, CryptoKeypath origin, CryptoKeypath children, byte[] parentFingerprint, String name, String note) {
+    public URHDKey(Boolean privateKey, byte[] key, byte[] chainCode, URCoinInfo useInfo, URKeypath origin, URKeypath children, byte[] parentFingerprint, String name, String note) {
         super(privateKey, key, chainCode, useInfo, origin, children, parentFingerprint, name, note);
     }
 

@@ -58,7 +58,15 @@ public class UROutputDescriptor extends RegistryItem {
         if(keys != null && !keys.isEmpty()) {
             Array array = new Array();
             for(RegistryItem key : keys) {
-                array.add(key.toCbor());
+                DataItem keyItem = key.toCbor();
+                if(key instanceof URHDKey) {
+                    keyItem.setTag(RegistryType.HDKEY.getTag());
+                } else if(key instanceof URECKey) {
+                    keyItem.setTag(RegistryType.ECKEY.getTag());
+                } else if(key instanceof URAddress) {
+                    keyItem.setTag(RegistryType.ADDRESS.getTag());
+                }
+                array.add(keyItem);
             }
             map.put(new UnsignedInteger(KEYS), array);
         }
