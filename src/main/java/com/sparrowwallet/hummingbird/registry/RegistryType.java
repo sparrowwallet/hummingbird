@@ -32,7 +32,7 @@ public enum RegistryType {
     OUTPUT_DESCRIPTOR("output-descriptor", 40308, UROutputDescriptor.class),
     SSKR("sskr", 40309, URSSKR.class),
     PSBT("psbt", 40310, URPSBT.class),
-    ACCOUNT("account", 40311, URAccount.class);
+    ACCOUNT_DESCRIPTOR("account-descriptor", 40311, URAccountDescriptor.class);
 
     private final String type;
     private final Integer tag;
