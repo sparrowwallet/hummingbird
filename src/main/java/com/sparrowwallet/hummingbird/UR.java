@@ -78,6 +78,26 @@ public class UR {
                 return CryptoAccount.fromCbor(item);
             } else if(registryType == RegistryType.CRYPTO_SSKR) {
                 return CryptoSskr.fromCbor(item);
+            } else if(registryType == RegistryType.SEED) {
+                return URSeed.fromCbor(item);
+            } else if(registryType == RegistryType.HDKEY) {
+                return URHDKey.fromCbor(item);
+            } else if(registryType == RegistryType.KEYPATH) {
+                return URKeypath.fromCbor(item);
+            } else if(registryType == RegistryType.COIN_INFO) {
+                return URCoinInfo.fromCbor(item);
+            } else if(registryType == RegistryType.ECKEY) {
+                return URECKey.fromCbor(item);
+            } else if(registryType == RegistryType.ADDRESS) {
+                return URAddress.fromCbor(item);
+            } else if(registryType == RegistryType.OUTPUT_DESCRIPTOR) {
+                return UROutputDescriptor.fromCbor(item);
+            } else if(registryType == RegistryType.PSBT) {
+                return URPSBT.fromCbor(item);
+            } else if(registryType == RegistryType.ACCOUNT_DESCRIPTOR) {
+                return URAccountDescriptor.fromCbor(item);
+            } else if(registryType == RegistryType.SSKR) {
+                return URSSKR.fromCbor(item);
             }
         } catch(CborException e) {
             throw new InvalidCBORException(e.getMessage());
