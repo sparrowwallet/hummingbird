@@ -4,6 +4,8 @@ import co.nstant.in.cbor.model.DataItem;
 import co.nstant.in.cbor.model.Map;
 import co.nstant.in.cbor.model.UnsignedInteger;
 
+import java.util.Objects;
+
 public class CryptoCoinInfo extends RegistryItem {
     public static final int TYPE_KEY = 1;
     public static final int NETWORK_KEY = 2;
@@ -12,7 +14,7 @@ public class CryptoCoinInfo extends RegistryItem {
     private final Integer network;
 
     public CryptoCoinInfo(Integer type, Integer network) {
-        if(network.equals(Network.GOERLI.networkValue) && !type.equals(Type.ETHEREUM.typeValue)) {
+        if(Objects.equals(network, Network.GOERLI.networkValue) && !Objects.equals(type, Type.ETHEREUM.typeValue)) {
             throw new IllegalArgumentException("Goerli network can only be selected for Ethereum");
         }
         this.type = type;
