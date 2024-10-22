@@ -12,7 +12,7 @@ Hummingbird requires a minimum of Java 8.
 Hummingbird is hosted in Maven Central and can be added as a dependency with the following:
 
 ```
-implementation('com.sparrowwallet:hummingbird:1.7.3')
+implementation('com.sparrowwallet:hummingbird:1.7.4')
 ```
 
 ## Usage
