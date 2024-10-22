@@ -66,8 +66,8 @@ nexusPublishing {
     repositories {
         sonatype {
             stagingProfileId = "a63b4b5e2bff9"
-            username = project.findProperty("nexusUsername")
-            password = project.findProperty("nexusPassword")
+            username = project.findProperty("ossrhToken")
+            password = project.findProperty("ossrhTokenPassword")
         }
     }
 }
