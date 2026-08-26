@@ -5,6 +5,7 @@ import com.sparrowwallet.hummingbird.fountain.FountainDecoder;
 import com.sparrowwallet.hummingbird.fountain.FountainEncoder;
 
 import java.util.Arrays;
+import java.util.Locale;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -142,7 +143,7 @@ public class URDecoder {
 
     static ParsedURString parse(String string) throws UR.URException {
         // Don't consider case
-        String lowercased = string.toLowerCase();
+        String lowercased = string.toLowerCase(Locale.ROOT);
 
         // Validate URI scheme
         if(!lowercased.startsWith("ur:")) {

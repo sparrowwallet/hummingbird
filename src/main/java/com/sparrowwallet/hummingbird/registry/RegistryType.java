@@ -1,5 +1,7 @@
 package com.sparrowwallet.hummingbird.registry;
 
+import java.util.Locale;
+
 public enum RegistryType {
     BYTES("bytes", null, byte[].class),
     CBOR_PNG("cbor-png", null, null),
@@ -63,7 +65,7 @@ public enum RegistryType {
 
     public static RegistryType fromString(String type) {
         for(RegistryType registryType : values()) {
-            if(registryType.toString().equals(type.toLowerCase())) {
+            if(registryType.toString().equals(type.toLowerCase(Locale.ROOT))) {
                 return registryType;
             }
         }

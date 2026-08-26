@@ -8,7 +8,7 @@ public class LegacyURDecoder {
     private final Set<String> fragments = new LinkedHashSet<>();
 
     public void receivePart(String fragment) {
-        fragments.add(fragment.toLowerCase());
+        fragments.add(fragment.toLowerCase(Locale.ROOT));
     }
 
     public boolean isComplete() {
@@ -54,7 +54,7 @@ public class LegacyURDecoder {
         }
 
         //Last component is always fragment payload in both legacy and current
-        String payload = components[components.length-1].toLowerCase();
+        String payload = components[components.length-1].toLowerCase(Locale.ROOT);
 
         //BC32 will never contain the following characters
         if(payload.indexOf('b') > -1 || payload.indexOf('i') > -1 || payload.indexOf('o') > -1) {
@@ -153,7 +153,7 @@ public class LegacyURDecoder {
     }
 
     public static int[] checkAndGetSequence(String payload) {
-        String[] pieces = payload.toLowerCase().split("of");
+        String[] pieces = payload.toLowerCase(Locale.ROOT).split("of");
         if(pieces.length != 2) {
             throw new IllegalArgumentException("Invalid sequence: " + payload);
         }

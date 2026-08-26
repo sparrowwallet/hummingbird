@@ -11,6 +11,7 @@ import java.io.ByteArrayOutputStream;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -237,5 +238,29 @@ public class URTest {
         Assert.assertEquals(2, urDecoder.getProcessedPartsCount());
         urDecoder.receivePart(parts[2]);
         Assert.assertEquals(3, urDecoder.getProcessedPartsCount());
+    }
+
+    @Test
+    public void testUppercaseDecodeInTurkishLocale() {
+        Locale defaultLocale = Locale.getDefault();
+
+        try {
+            Locale.setDefault(Locale.forLanguageTag("tr"));
+
+            UR ur = makeMessageUR(2048, "Wolf");
+            UREncoder urEncoder = new UREncoder(ur, 100, 10, 0);
+            URDecoder urDecoder = new URDecoder();
+
+            do {
+                String part = urEncoder.nextPart().toUpperCase(Locale.ROOT);
+                urDecoder.receivePart(part);
+            } while(urDecoder.getResult() == null);
+
+            Assert.assertEquals(ResultType.SUCCESS, urDecoder.getResult().type);
+            Assert.assertEquals(ur, urDecoder.getResult().ur);
+            Assert.assertEquals(RegistryType.BYTES, RegistryType.fromString("BYTES"));
+        } finally {
+            Locale.setDefault(defaultLocale);
+        }
     }
 }
