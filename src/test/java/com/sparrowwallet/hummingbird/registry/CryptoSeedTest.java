@@ -11,9 +11,14 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
+import java.util.TimeZone;
 
 public class CryptoSeedTest {
     private final DateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy", Locale.ENGLISH);
+
+    {
+        dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+    }
 
     @Test
     public void testSeed() throws CborException {
