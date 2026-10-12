@@ -13,6 +13,9 @@ public class UREncoder {
     private final UR ur;
     private final FountainEncoder fountainEncoder;
 
+    /**
+     * @throws IllegalArgumentException if the UR would require more than {@link FountainEncoder#MAX_SEQ_LEN} fragments at the given fragment lengths
+     */
     public UREncoder(UR ur, int maxFragmentLen, int minFragmentLen, long firstSeqNum) {
         this.ur = ur;
         this.fountainEncoder = new FountainEncoder(ur.getCborBytes(), maxFragmentLen, minFragmentLen, firstSeqNum);

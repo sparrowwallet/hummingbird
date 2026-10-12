@@ -60,23 +60,31 @@ public abstract class PathComponent {
                     boolean hardened = (componentArray.getDataItems().get(++i) == SimpleValue.TRUE);
                     UnsignedInteger startIndex = (UnsignedInteger)subcomponentArray.getDataItems().get(0);
                     UnsignedInteger endIndex = (UnsignedInteger)subcomponentArray.getDataItems().get(1);
-                    components.add(new RangePathComponent(startIndex.getValue().intValue(), endIndex.getValue().intValue(), hardened));
+                    components.add(new RangePathComponent(toIndex(startIndex), toIndex(endIndex), hardened));
                 } else if(subcomponentArray.getDataItems().size() == 4) {
                     UnsignedInteger externalIndex = (UnsignedInteger)subcomponentArray.getDataItems().get(0);
                     boolean externalHardened = (subcomponentArray.getDataItems().get(1) == SimpleValue.TRUE);
-                    IndexPathComponent externalPathComponent = new IndexPathComponent(externalIndex.getValue().intValue(), externalHardened);
+                    IndexPathComponent externalPathComponent = new IndexPathComponent(toIndex(externalIndex), externalHardened);
                     UnsignedInteger internalIndex = (UnsignedInteger)subcomponentArray.getDataItems().get(2);
                     boolean internalHardened = (subcomponentArray.getDataItems().get(3) == SimpleValue.TRUE);
-                    IndexPathComponent internalPathComponent = new IndexPathComponent(internalIndex.getValue().intValue(), internalHardened);
+                    IndexPathComponent internalPathComponent = new IndexPathComponent(toIndex(internalIndex), internalHardened);
                     components.add(new PairPathComponent(externalPathComponent, internalPathComponent));
                 }
             } else if(component instanceof UnsignedInteger) {
                 UnsignedInteger index = (UnsignedInteger)component;
                 boolean hardened = (componentArray.getDataItems().get(++i) == SimpleValue.TRUE);
-                components.add(new IndexPathComponent(index.getValue().intValue(), hardened));
+                components.add(new IndexPathComponent(toIndex(index), hardened));
             }
         }
 
         return components;
+    }
+
+    private static int toIndex(UnsignedInteger index) {
+        if(index.getValue().bitLength() >= Integer.SIZE) {
+            throw new IllegalArgumentException("Invalid index " + index.getValue() + " - most significant bit cannot be set");
+        }
+
+        return index.getValue().intValue();
     }
 }

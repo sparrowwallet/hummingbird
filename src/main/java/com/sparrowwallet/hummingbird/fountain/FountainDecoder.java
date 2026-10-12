@@ -257,6 +257,11 @@ public class FountainDecoder {
     }
 
     private boolean validatePart(FountainEncoder.Part part) {
+        // The fragments must be non-empty and together hold at least the full message
+        if(part.getData().length == 0 || part.getMessageLen() > (long)part.getSeqLen() * part.getData().length) {
+            return false;
+        }
+
         // If this is the first part we've seen
         if(expectedPartIndexes == null) {
             // Record the things that all the other parts we see will have to match to be valid.

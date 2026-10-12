@@ -2,6 +2,7 @@ package com.sparrowwallet.hummingbird.registry;
 
 import co.nstant.in.cbor.CborEncoder;
 import co.nstant.in.cbor.CborException;
+import co.nstant.in.cbor.model.UnsignedInteger;
 import com.sparrowwallet.hummingbird.UR;
 
 import java.io.ByteArrayOutputStream;
@@ -20,6 +21,13 @@ public abstract class RegistryItem implements CborSerializable {
         } catch(CborException | UR.InvalidTypeException e) {
             throw new IllegalArgumentException(e);
         }
+    }
+
+    /**
+     * Converts a CBOR map key to an int, returning -1 for keys too large to match any known key so that they are ignored like other unknown keys.
+     */
+    protected static int toKey(UnsignedInteger key) {
+        return key.getValue().bitLength() < Integer.SIZE ? key.getValue().intValue() : -1;
     }
 
     /**

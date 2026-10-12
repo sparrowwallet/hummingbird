@@ -111,6 +111,9 @@ public class URDecoder {
                     return false;
                 }
 
+                // Only lock in the type once a part has been accepted, so a malformed first part cannot block a valid scan
+                expectedType = parsedURString.type;
+
                 if(fountainDecoder.getResult() == null) {
                     //Not done yet
                 } else if(fountainDecoder.getResult().type == ResultType.SUCCESS) {
@@ -123,22 +126,17 @@ public class URDecoder {
             } else {
                 throw new UR.InvalidSequenceComponentException("Invalid sequence " + seq);
             }
-        } catch(UR.URException | CborException e) {
+        } catch(UR.URException | CborException | RuntimeException e) {
             return false;
         }
     }
 
     private boolean validatePart(String type) {
         if(expectedType == null) {
-            if(!UR.isURType(type)) {
-                return false;
-            }
-            expectedType = type;
-        } else {
-            return expectedType.equals(type);
+            return UR.isURType(type);
         }
 
-        return true;
+        return expectedType.equals(type);
     }
 
     static ParsedURString parse(String string) throws UR.URException {

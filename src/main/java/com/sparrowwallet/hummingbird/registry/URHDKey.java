@@ -56,7 +56,7 @@ public class URHDKey extends CryptoHDKey {
         Map map = (Map)item;
         for(DataItem key : map.getKeys()) {
             UnsignedInteger uintKey = (UnsignedInteger)key;
-            int intKey = uintKey.getValue().intValue();
+            int intKey = toKey(uintKey);
             if(intKey == IS_MASTER_KEY) {
                 isMasterKey = (map.get(uintKey) == SimpleValue.TRUE);
             } else if(intKey == IS_PRIVATE_KEY) {

@@ -11,6 +11,7 @@ import co.nstant.in.cbor.model.UnsignedInteger;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -22,6 +23,9 @@ import static com.sparrowwallet.hummingbird.fountain.FountainUtils.chooseFragmen
  * Ported from https://github.com/BlockchainCommons/URKit
  */
 public class FountainEncoder {
+    // Upper bound on the number of fragments in a message, to bound memory use when decoding untrusted input
+    public static final int MAX_SEQ_LEN = 65536;
+
     private final int messageLen;
     private final long checksum;
     private final int fragmentLen;
@@ -42,6 +46,9 @@ public class FountainEncoder {
         this.checksum = crc32.getValue();
 
         this.fragmentLen = findNominalFragmentLength(messageLen, minFragmentLen, maxFragmentLen);
+        if((long)fragmentLen * MAX_SEQ_LEN < messageLen) {
+            throw new IllegalArgumentException("Message too long for fragment length " + fragmentLen + ", exceeds the maximum of " + MAX_SEQ_LEN + " fragments");
+        }
         this.fragments = partitionMessage(message, fragmentLen);
         this.seqLen = fragments.size();
         this.seqNum = firstSeqNum;
@@ -169,17 +176,51 @@ public class FountainEncoder {
 
         public static Part fromCborBytes(byte[] cborData) throws CborException {
             ByteArrayInputStream bais = new ByteArrayInputStream(cborData);
-            List<DataItem> arrayDataItems = new CborDecoder(bais).decode();
-            Array array = (Array)arrayDataItems.get(0);
-            List<DataItem> dataItems = array.getDataItems();
+            CborDecoder cborDecoder = new CborDecoder(bais);
+            cborDecoder.setMaxPreallocationSize(cborData.length);
+            List<DataItem> arrayDataItems = cborDecoder.decode();
+            if(arrayDataItems.size() != 1 || !(arrayDataItems.get(0) instanceof Array)) {
+                throw new CborException("Invalid part: expected a single array");
+            }
 
-            UnsignedInteger seqNum = (UnsignedInteger)dataItems.get(0);
-            UnsignedInteger seqLen = (UnsignedInteger)dataItems.get(1);
-            UnsignedInteger messageLen = (UnsignedInteger)dataItems.get(2);
-            UnsignedInteger checksum = (UnsignedInteger)dataItems.get(3);
-            ByteString data = (ByteString)dataItems.get(4);
+            List<DataItem> dataItems = ((Array)arrayDataItems.get(0)).getDataItems();
+            if(dataItems.size() != 5) {
+                throw new CborException("Invalid part: expected 5 items but found " + dataItems.size());
+            }
+            for(int i = 0; i < 4; i++) {
+                if(!(dataItems.get(i) instanceof UnsignedInteger)) {
+                    throw new CborException("Invalid part: item " + i + " is not an unsigned integer");
+                }
+            }
+            if(!(dataItems.get(4) instanceof ByteString)) {
+                throw new CborException("Invalid part: data is not a byte string");
+            }
 
-            return new Part(seqNum.getValue().longValue(), seqLen.getValue().intValue(), messageLen.getValue().intValue(), checksum.getValue().longValue(), data.getBytes());
+            long seqNum = toUint32(((UnsignedInteger)dataItems.get(0)).getValue(), "sequence number");
+            long seqLen = toUint32(((UnsignedInteger)dataItems.get(1)).getValue(), "sequence length");
+            long messageLen = toUint32(((UnsignedInteger)dataItems.get(2)).getValue(), "message length");
+            long checksum = toUint32(((UnsignedInteger)dataItems.get(3)).getValue(), "checksum");
+            byte[] data = ((ByteString)dataItems.get(4)).getBytes();
+
+            if(seqNum < 1) {
+                throw new CborException("Invalid part: sequence number must be at least 1");
+            }
+            if(seqLen < 1 || seqLen > MAX_SEQ_LEN) {
+                throw new CborException("Invalid part: sequence length " + seqLen + " out of range");
+            }
+            if(messageLen < 1 || messageLen > Integer.MAX_VALUE) {
+                throw new CborException("Invalid part: message length " + messageLen + " out of range");
+            }
+
+            return new Part(seqNum, (int)seqLen, (int)messageLen, checksum, data);
+        }
+
+        private static long toUint32(BigInteger value, String name) throws CborException {
+            if(value.signum() < 0 || value.bitLength() > Integer.SIZE) {
+                throw new CborException("Invalid part: " + name + " " + value + " out of range");
+            }
+
+            return value.longValue();
         }
 
         @Override

@@ -54,11 +54,11 @@ public class CryptoAddress extends RegistryItem {
         Map map = (Map)item;
         for(DataItem key : map.getKeys()) {
             UnsignedInteger uintKey = (UnsignedInteger)key;
-            int intKey = uintKey.getValue().intValue();
+            int intKey = toKey(uintKey);
             if(intKey == INFO) {
                 info = CryptoCoinInfo.fromCbor(map.get(key));
             } else if(intKey == TYPE) {
-                type = Type.values()[((UnsignedInteger)map.get(key)).getValue().intValue()];
+                type = Type.values()[((UnsignedInteger)map.get(key)).getValue().intValueExact()];
             } else if(intKey == DATA) {
                 data = ((ByteString)map.get(key)).getBytes();
             }

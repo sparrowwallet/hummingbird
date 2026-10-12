@@ -54,9 +54,9 @@ public class CryptoECKey extends RegistryItem {
         Map map = (Map)item;
         for(DataItem key : map.getKeys()) {
             UnsignedInteger uintKey = (UnsignedInteger)key;
-            int intKey = uintKey.getValue().intValue();
+            int intKey = toKey(uintKey);
             if(intKey == CURVE) {
-                curve = ((UnsignedInteger)map.get(key)).getValue().intValue();
+                curve = ((UnsignedInteger)map.get(key)).getValue().intValueExact();
             } else if(intKey == PRIVATE) {
                 privateKey = (map.get(key) == SimpleValue.TRUE);
             } else if(intKey == DATA) {

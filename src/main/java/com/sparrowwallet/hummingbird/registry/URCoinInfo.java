@@ -25,12 +25,12 @@ public class URCoinInfo extends CryptoCoinInfo {
         Map map = (Map)item;
         for(DataItem key : map.getKeys()) {
             UnsignedInteger uintKey = (UnsignedInteger)key;
-            int intKey = uintKey.getValue().intValue();
+            int intKey = toKey(uintKey);
 
             if(intKey == TYPE_KEY) {
-                type = ((UnsignedInteger)map.get(key)).getValue().intValue();
+                type = ((UnsignedInteger)map.get(key)).getValue().intValueExact();
             } else if(intKey == NETWORK_KEY) {
-                network = ((UnsignedInteger)map.get(key)).getValue().intValue();
+                network = ((UnsignedInteger)map.get(key)).getValue().intValueExact();
             }
         }
 

@@ -63,10 +63,10 @@ public class MultiKey implements CborSerializable {
         Map map = (Map)item;
         for(DataItem key : map.getKeys()) {
             UnsignedInteger intKey = (UnsignedInteger)key;
-            if(intKey.getValue().intValue() == THRESHOLD_KEY) {
-                threshold = ((UnsignedInteger)map.get(key)).getValue().intValue();
+            if(RegistryItem.toKey(intKey) == THRESHOLD_KEY) {
+                threshold = ((UnsignedInteger)map.get(key)).getValue().intValueExact();
             }
-            if(intKey.getValue().intValue() == KEYS_KEY) {
+            if(RegistryItem.toKey(intKey) == KEYS_KEY) {
                 Array keysArray = (Array)map.get(key);
                 for(DataItem keyExp : keysArray.getDataItems()) {
                     if(keyExp.getTag().getValue() == RegistryType.CRYPTO_ECKEY.getTag()) {

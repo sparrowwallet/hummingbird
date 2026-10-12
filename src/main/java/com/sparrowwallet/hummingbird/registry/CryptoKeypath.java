@@ -77,13 +77,13 @@ public class CryptoKeypath extends RegistryItem {
         Map map = (Map)item;
         for(DataItem key : map.getKeys()) {
             UnsignedInteger uintKey = (UnsignedInteger)key;
-            int intKey = uintKey.getValue().intValue();
+            int intKey = toKey(uintKey);
             if(intKey == COMPONENTS_KEY) {
                 components = PathComponent.fromCbor(map.get(key));
             } else if(intKey == SOURCE_FINGERPRINT_KEY) {
                 sourceFingerprint = bigIntegerToBytes(((UnsignedInteger)map.get(key)).getValue(), 4);
             } else if(intKey == DEPTH_KEY) {
-                depth = ((UnsignedInteger)map.get(key)).getValue().intValue();
+                depth = ((UnsignedInteger)map.get(key)).getValue().intValueExact();
             }
         }
 

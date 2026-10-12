@@ -50,7 +50,7 @@ public class CryptoBip39 extends RegistryItem {
         Map map = (Map)item;
         for(DataItem key : map.getKeys()) {
             UnsignedInteger uintKey = (UnsignedInteger)key;
-            int intKey = uintKey.getValue().intValue();
+            int intKey = toKey(uintKey);
             if(intKey == WORDS) {
                 Array wordsArray = (Array)map.get(key);
                 for(DataItem wordItem : wordsArray.getDataItems()) {

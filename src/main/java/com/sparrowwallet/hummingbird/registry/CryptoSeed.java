@@ -73,7 +73,7 @@ public class CryptoSeed extends RegistryItem {
         Map map = (Map)item;
         for(DataItem key : map.getKeys()) {
             UnsignedInteger uintKey = (UnsignedInteger)key;
-            int intKey = uintKey.getValue().intValue();
+            int intKey = toKey(uintKey);
             if(intKey == PAYLOAD_KEY) {
                 seed = ((ByteString)map.get(key)).getBytes();
             } else if(intKey == BIRTHDATE_KEY) {

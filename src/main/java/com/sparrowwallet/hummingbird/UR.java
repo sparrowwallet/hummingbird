@@ -8,6 +8,7 @@ import co.nstant.in.cbor.model.ByteString;
 import co.nstant.in.cbor.model.DataItem;
 import com.sparrowwallet.hummingbird.registry.*;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.util.Arrays;
 import java.util.List;
@@ -51,7 +52,7 @@ public class UR {
         RegistryType registryType = getRegistryType();
 
         try {
-            List<DataItem> dataItems = CborDecoder.decode(getCborBytes());
+            List<DataItem> dataItems = decodeCbor(getCborBytes());
             DataItem item = dataItems.get(0);
 
             if(registryType == RegistryType.BYTES) {
@@ -101,6 +102,8 @@ public class UR {
             }
         } catch(CborException e) {
             throw new InvalidCBORException(e.getMessage());
+        } catch(RuntimeException e) {
+            throw new InvalidCBORException("Invalid " + registryType + " CBOR: " + e.getMessage());
         }
 
         return null;
@@ -108,15 +111,22 @@ public class UR {
 
     public byte[] toBytes() throws InvalidCBORException {
         try {
-            List<DataItem> dataItems = CborDecoder.decode(getCborBytes());
-            if(!(dataItems.get(0) instanceof ByteString)) {
-                throw new IllegalArgumentException("First element of CBOR is not a byte string");
+            List<DataItem> dataItems = decodeCbor(getCborBytes());
+            if(dataItems.isEmpty() || !(dataItems.get(0) instanceof ByteString)) {
+                throw new InvalidCBORException("First element of CBOR is not a byte string");
             }
 
             return ((ByteString)dataItems.get(0)).getBytes();
         } catch(CborException e) {
             throw new InvalidCBORException(e.getMessage());
         }
+    }
+
+    private static List<DataItem> decodeCbor(byte[] cbor) throws CborException {
+        // Declared lengths cannot exceed the input, so cap preallocation to avoid huge allocations from malicious length headers
+        CborDecoder cborDecoder = new CborDecoder(new ByteArrayInputStream(cbor));
+        cborDecoder.setMaxPreallocationSize(cbor.length);
+        return cborDecoder.decode();
     }
 
     public static boolean isURType(String type) {

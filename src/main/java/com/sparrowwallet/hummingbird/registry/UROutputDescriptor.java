@@ -96,7 +96,7 @@ public class UROutputDescriptor extends RegistryItem {
         Map map = (Map)item;
         for(DataItem key : map.getKeys()) {
             UnsignedInteger uintKey = (UnsignedInteger)key;
-            int intKey = uintKey.getValue().intValue();
+            int intKey = toKey(uintKey);
             if(intKey == SOURCE) {
                 source = ((UnicodeString)map.get(key)).getString();
             } else if(intKey == KEYS) {
